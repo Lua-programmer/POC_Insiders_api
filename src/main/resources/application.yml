@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view:
+  main:
+    banner-mode: off
+  flyway:
+    locations:
+      - filesystem:src/main/resources/db/migrations
+    encoding: cp1252

@@ -1,0 +1,13 @@
+.gradle
+*.idea
+gradle
+gradlew
+gradlew.bat
+settings.gradle
+*.iml
+docker/config/.env
+build
+target
+
+/src/main/resources/application-prod.yml
+/src/main/resources/application-test.yml
