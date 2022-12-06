@@ -5,10 +5,12 @@ import io.github.luaprogrammer.poc.customer.enums.Doc_Type;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 
+import java.util.UUID;
+
 @Data
 public class CustomerResponseDTO {
 
-    private Long customerId;
+    private UUID customerId;
 
     private String name;
 
