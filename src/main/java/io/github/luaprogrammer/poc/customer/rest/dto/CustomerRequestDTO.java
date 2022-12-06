@@ -19,11 +19,11 @@ public class CustomerRequestDTO {
 
     private Long phone;
 
-    public Customer convertForEntity(Doc_Type documentoTipo) {
-        return new Customer(name, docValue, documentoTipo, email, phone, LocalDateTime.now());
+    public Customer convertForEntity(Doc_Type documentType) {
+        return new Customer(name, docValue, documentType, email, phone, LocalDateTime.now());
     }
 
-    public Customer convertForEntity(UUID id, Doc_Type documentoTipo) {
-        return new Customer(id, name, docValue, documentoTipo, email, phone, LocalDateTime.now());
+    public Customer convertForEntity(UUID id, Doc_Type documentType) {
+        return new Customer(id, name, docValue, documentType, email, phone, LocalDateTime.now());
     }
 }

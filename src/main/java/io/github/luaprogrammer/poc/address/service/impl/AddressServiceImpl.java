@@ -5,7 +5,6 @@ import io.github.luaprogrammer.poc.address.repository.AddressRepository;
 import io.github.luaprogrammer.poc.address.rest.dto.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.AddressService;
-import io.github.luaprogrammer.poc.exception.RuleBusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -42,7 +41,6 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address updateAddress(UUID id, Address address) {
         Address addressSaved = validateAddress(id);
-        validateDuplicateAddress(address);
         BeanUtils.copyProperties(address, addressSaved);
         return addressRepository.save(addressSaved);
     }
@@ -59,12 +57,5 @@ public class AddressServiceImpl implements AddressService {
             throw new EmptyResultDataAccessException(1);
         }
         return addressByCode.get();
-    }
-
-    private void validateDuplicateAddress(Address address) {
-        Address addressFound = addressRepository.findByCep(address.getCep());
-        if (addressFound != null && addressFound.getAddressId() != address.getAddressId()) {
-            throw new RuleBusinessException(String.format("Address %d already exists", address.getAddressId()));
-        }
     }
 }
