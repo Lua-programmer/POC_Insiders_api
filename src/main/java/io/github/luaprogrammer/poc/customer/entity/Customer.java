@@ -1,25 +1,29 @@
 package io.github.luaprogrammer.poc.customer.entity;
 
 import io.github.luaprogrammer.poc.address.entity.Address;
-import io.github.luaprogrammer.poc.customer.enums.Doc_Type;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
-@Table(name = "customer")
-@NoArgsConstructor
 @AllArgsConstructor
-public class Customer implements Serializable {
+@NoArgsConstructor
+@Table(name = "customer")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("P")
+public abstract class Customer implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -27,17 +31,12 @@ public class Customer implements Serializable {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private UUID customerId;
+    private UUID id;
 
-    @Column(name = "name_complete")
     private String name;
 
-    @Column(name = "doc_value")
-    private Long docValue;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "doc_type")
-    private Doc_Type docType;
+    @Column(insertable=false, updatable=false)
+    private String type;
 
     private String email;
 
@@ -46,25 +45,35 @@ public class Customer implements Serializable {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Address> addresses;
 
-    public Customer(UUID customerId, String name, Long docValue, Doc_Type docType, String email, Long phone, LocalDateTime createdAt) {
-        this.customerId = customerId;
+    public Customer(UUID id, String name, String email, Long phone, LocalDateTime createdAt) {
+        this.id = id;
         this.name = name;
-        this.docValue = docValue;
-        this.docType = docType;
         this.email = email;
         this.phone = phone;
         this.createdAt = createdAt;
     }
 
-    public Customer(String name, Long docValue, Doc_Type docType, String email, Long phone, LocalDateTime createdAt) {
+    public Customer(String name, String email, Long phone, LocalDateTime createdAt) {
         this.name = name;
-        this.docValue = docValue;
-        this.docType = docType;
         this.email = email;
         this.phone = phone;
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Customer customer = (Customer) o;
+        return id != null && Objects.equals(id, customer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

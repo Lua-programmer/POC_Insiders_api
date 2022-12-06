@@ -1,21 +1,20 @@
 package io.github.luaprogrammer.poc.customer.service;
 
-import io.github.luaprogrammer.poc.customer.entity.Customer;
-import io.github.luaprogrammer.poc.customer.rest.dto.CustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.CorporateCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.CustomerResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerService {
-    List<CustomerResponseDTO> findAllCustomers();
+    Page<CustomerResponseDTO> findAllCorporateCustomer(Pageable pageable);
 
-    Optional<Customer> findCustomerById(UUID id);
+    CustomerResponseDTO findCorporateCustomerById(UUID id);
 
-    CustomerResponseDTO saveCustomer(CustomerRequestDTO customer, String docType);
+    CustomerResponseDTO saveCorporateCustomer(CorporateCustomerRequestDTO customer);
 
-    Customer updateCustomer(UUID id, Customer customer);
+    CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer);
 
-    void deleteCustomer(UUID id);
+    void deleteCorporateCustomer(UUID id);
 }

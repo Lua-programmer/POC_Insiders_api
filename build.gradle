@@ -24,6 +24,7 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-mysql', version: '9.8.3'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.8.3'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'

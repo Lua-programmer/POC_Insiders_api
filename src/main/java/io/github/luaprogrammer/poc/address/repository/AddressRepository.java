@@ -2,7 +2,6 @@ package io.github.luaprogrammer.poc.address.repository;
 
 
 import io.github.luaprogrammer.poc.address.entity.Address;
-import io.github.luaprogrammer.poc.address.rest.dto.AddressResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

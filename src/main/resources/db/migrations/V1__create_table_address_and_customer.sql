@@ -14,13 +14,14 @@ CREATE TABLE address
 
 CREATE TABLE customer
 (
-    id            VARCHAR(255) NOT NULL PRIMARY KEY,
-    name_complete VARCHAR(255) NOT NULL,
-    doc_value     BIGINT       NOT NULL,
-    doc_type      VARCHAR(255) NOT NULL,
-    email         VARCHAR(255) NOT NULL,
-    phone         BIGINT       NOT NULL,
-    created_at    DATETIME     NOT NULL,
-    endereco_id   VARCHAR(255),
+    id          VARCHAR(255) NOT NULL PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    cpf         VARCHAR(255),
+    cnpj        VARCHAR(255),
+    type        CHAR         NOT NULL,
+    email       VARCHAR(255) NOT NULL,
+    phone       BIGINT       NOT NULL,
+    created_at  DATETIME     NOT NULL,
+    endereco_id VARCHAR(255),
     FOREIGN KEY (endereco_id) REFERENCES address (id)
 );

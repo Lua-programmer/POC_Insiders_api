@@ -1,7 +1,7 @@
 package io.github.luaprogrammer.poc.customer.rest.dto;
 
-import io.github.luaprogrammer.poc.customer.entity.Customer;
-import io.github.luaprogrammer.poc.customer.enums.Doc_Type;
+import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
+import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 
@@ -14,15 +14,16 @@ public class CustomerResponseDTO {
 
     private String name;
 
-    private Long docValue;
-
-    private Doc_Type docType;
-
     private String email;
 
     private Long phone;
 
-    public static CustomerResponseDTO convertForDto(Customer customer) {
+    public static CustomerResponseDTO convertForDto(IndividualCustomer customer) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(customer, CustomerResponseDTO.class);
+    }
+
+    public static CustomerResponseDTO convertForDto(CorporateCustomer customer) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(customer, CustomerResponseDTO.class);
     }

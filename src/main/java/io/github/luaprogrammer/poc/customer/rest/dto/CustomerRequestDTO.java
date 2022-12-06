@@ -1,29 +1,30 @@
 package io.github.luaprogrammer.poc.customer.rest.dto;
 
-import io.github.luaprogrammer.poc.customer.entity.Customer;
-import io.github.luaprogrammer.poc.customer.enums.Doc_Type;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
+import lombok.NoArgsConstructor;
 
 
 @Data
-public class CustomerRequestDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public abstract class CustomerRequestDTO {
 
     private String name;
-
-    private Long docValue;
 
     private String email;
 
     private Long phone;
 
-    public Customer convertForEntity(Doc_Type documentType) {
-        return new Customer(name, docValue, documentType, email, phone, LocalDateTime.now());
-    }
+//    public IndividualCustomer convertCPForEntity() {
+//        return new IndividualCustomer(name, type, email, phone, LocalDateTime.now(), cpf);
+//    }
 
-    public Customer convertForEntity(UUID id, Doc_Type documentType) {
-        return new Customer(id, name, docValue, documentType, email, phone, LocalDateTime.now());
-    }
+
+//    public IndividualCustomer convertCPForEntity(UUID id) {
+//        return new IndividualCustomer(id, name, type, email, phone, LocalDateTime.now(), cpf);
+//    }
+
+
+
 }

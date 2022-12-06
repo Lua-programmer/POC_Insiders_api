@@ -1,63 +1,70 @@
 package io.github.luaprogrammer.poc.customer.service.impl;
 
 
-import io.github.luaprogrammer.poc.customer.entity.Customer;
-import io.github.luaprogrammer.poc.customer.enums.Doc_Type;
-import io.github.luaprogrammer.poc.customer.repository.CustomerRepository;
+import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
+import io.github.luaprogrammer.poc.customer.repository.CorporateCustomerRepository;
+import io.github.luaprogrammer.poc.customer.repository.IndividualCustomerRepository;
+import io.github.luaprogrammer.poc.customer.rest.dto.CorporateCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.CustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private final CustomerRepository customerRepository;
+    private final CorporateCustomerRepository cRepository;
+    private final IndividualCustomerRepository iRepository;
 
     @Override
-    public List<CustomerResponseDTO> findAllCustomers() {
-        return customerRepository.findAll().stream().map(CustomerResponseDTO::convertForDto).collect(Collectors.toList());
+    public Page<CustomerResponseDTO> findAllCorporateCustomer(Pageable pageable) {
+        return cRepository.findAll(pageable).map(CustomerResponseDTO::convertForDto);
     }
 
     @Override
-    public Optional<Customer> findCustomerById(UUID id) {
-        return customerRepository.findById(id);
-    }
-
-    @Override
-    public CustomerResponseDTO saveCustomer(CustomerRequestDTO customer, String docType) {
-        Doc_Type documetType = Objects.equals(docType, "cpf") ? Doc_Type.CPF : Doc_Type.CNPJ;
-        Customer customerSaved = customerRepository.save(customer.convertForEntity(documetType));
-        return CustomerResponseDTO.convertForDto(customerSaved);
-    }
-
-    @Override
-    public Customer updateCustomer(UUID id, Customer customer) {
-        Customer customerSaved = validateCustomer(id);
-        BeanUtils.copyProperties(customer, customerSaved);
-        return customerRepository.save(customerSaved);
-    }
-
-    @Override
-    public void deleteCustomer(UUID id) {
-        customerRepository.deleteById(id);
-    }
-
-    private Customer validateCustomer(UUID id) {
-        Optional<Customer> customerById = findCustomerById(id);
-        if (customerById.isEmpty()) {
-            throw new EmptyResultDataAccessException(1);
+    public CustomerResponseDTO findCorporateCustomerById(UUID id) {
+        Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
+        if (corporateCustomer.isEmpty()) {
+            throw new RuntimeException("id not found");
         }
-        return customerById.get();
+        return CustomerResponseDTO.convertForDto(corporateCustomer.get());
+    }
+
+    @Override
+    public CustomerResponseDTO saveCorporateCustomer(CorporateCustomerRequestDTO customer) {
+       CorporateCustomer corporateCustomer = cRepository.save(customer.convertCNPJForEntity());
+       return CustomerResponseDTO.convertForDto(corporateCustomer);
+    }
+
+    @Override
+    public CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer) {
+        Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
+        if (corporateCustomerSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        } else {
+            BeanUtils.copyProperties(customer, corporateCustomerSaved);
+        }
+
+        CorporateCustomer corporateCustomerupdate = customer.convertCNPJForEntity(id);
+        CorporateCustomer newCorporateCustomer = cRepository.save(corporateCustomerupdate);
+        return CustomerResponseDTO.convertForDto(newCorporateCustomer);
+    }
+
+    @Override
+    public void deleteCorporateCustomer(UUID id) {
+        Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
+        if (corporateCustomer.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+        cRepository.deleteById(corporateCustomer.get().getId());
     }
 }

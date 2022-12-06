@@ -1,20 +1,18 @@
 package io.github.luaprogrammer.poc.customer.rest.controller;
 
-import io.github.luaprogrammer.poc.customer.entity.Customer;
-import io.github.luaprogrammer.poc.customer.enums.Doc_Type;
-import io.github.luaprogrammer.poc.customer.rest.dto.CustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.CorporateCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.impl.CustomerServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,33 +21,31 @@ public class CustomerController {
 
     private final CustomerServiceImpl customerService;
 
-    @PostMapping
-    public ResponseEntity<CustomerResponseDTO> createCustomer(@RequestBody CustomerRequestDTO requestCustomer, @RequestParam("docType") String docType) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveCustomer(requestCustomer, docType));
+    @PostMapping("/corporations")
+    public ResponseEntity<CustomerResponseDTO> createCorporateCustomer(@RequestBody CorporateCustomerRequestDTO requestCustomer) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveCorporateCustomer(requestCustomer));
     }
 
-    @GetMapping
-    public ResponseEntity<List<CustomerResponseDTO>> readAllCustomers() {
+    @GetMapping("/corporations")
+    public ResponseEntity<Page<CustomerResponseDTO>> readAllCorporateCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(customerService.findAllCustomers());
+                .body(customerService.findAllCorporateCustomer(pageable));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> readCustomerById(@PathVariable UUID id) {
-        Optional<Customer> customer = customerService.findCustomerById(id);
-        return customer.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(CustomerResponseDTO.convertForDto(customer.get()));
+    @GetMapping("/corporations/{id}")
+    public ResponseEntity<CustomerResponseDTO> readCorporateCustomerById(@PathVariable UUID id) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findCorporateCustomerById(id));
+
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> updateCustomer(@PathVariable UUID id, @RequestBody CustomerRequestDTO requestCustomer, @RequestParam("docType") String docType) {
-        Doc_Type documentoTipo = Objects.equals(docType, "cpf") ? Doc_Type.CPF : Doc_Type.CNPJ;
-        Customer customerUpdated = customerService.updateCustomer(id, requestCustomer.convertForEntity(id, documentoTipo));
-        return ResponseEntity.ok(CustomerResponseDTO.convertForDto(customerUpdated));
+    @PutMapping("/corporations/{id}")
+    public ResponseEntity<CustomerResponseDTO> updateCorporateCustomer(@PathVariable UUID id, @RequestBody CorporateCustomerRequestDTO requestCustomer) {
+        return ResponseEntity.ok(customerService.updateCorporateCustomer(id, requestCustomer));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("corporations/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAddress(@PathVariable UUID id) {
-        customerService.deleteCustomer(id);
+    public void deleteCorporateCustomer(@PathVariable UUID id) {
+        customerService.deleteCorporateCustomer(id);
     }
 }
