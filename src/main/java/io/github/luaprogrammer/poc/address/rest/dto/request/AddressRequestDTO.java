@@ -13,21 +13,16 @@ public class AddressRequestDTO {
     @NotBlank(message = "cep is required")
     private String cep;
 
-    @NotBlank(message = "logradouro is required")
     private String logradouro;
 
     private String complemento;
 
     private Long numero;
 
-    @NotBlank(message = "bairro is required")
     private String bairro;
 
-
-    @NotBlank(message = "localidade is required")
     private String localidade;
 
-    @NotBlank(message = "uf is required")
     private String uf;
 
     private Boolean isPrincipal = false;

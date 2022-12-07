@@ -1,5 +1,6 @@
 package io.github.luaprogrammer.poc.address.service.impl;
 
+import com.google.gson.Gson;
 import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.repository.AddressRepository;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
@@ -11,6 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,7 +43,28 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressResponseDTO saveAddress(AddressRequestDTO requestAddress) {
+    public AddressResponseDTO saveAddress(AddressRequestDTO requestAddress) throws Exception {
+
+
+        URL url = new URL("https://viacep.com.br/ws/"+requestAddress.getCep()+"/json/");
+        URLConnection connection = url.openConnection();
+        InputStream is = connection.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+        String cep = "";
+        StringBuilder jsonCep = new StringBuilder();
+        while((cep = reader.readLine()) != null) {
+            jsonCep.append(cep);
+        }
+
+        AddressResponseDTO addressAux = new Gson().fromJson(jsonCep.toString(), AddressResponseDTO.class);
+        requestAddress.setCep(addressAux.getCep());
+        requestAddress.setLogradouro(addressAux.getLogradouro());
+        requestAddress.setBairro(addressAux.getBairro());
+        requestAddress.setLocalidade(addressAux.getLocalidade());
+        requestAddress.setUf(addressAux.getUf());
+
+
         Address addressSaved = aRepository.save(requestAddress.convertForEntity());
         return AddressResponseDTO.convertForDto(addressSaved);
     }
