@@ -23,7 +23,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("P")
-public abstract class Customer implements Serializable{
+public abstract class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public abstract class Customer implements Serializable{
 
     private String name;
 
-    @Column(insertable=false, updatable=false)
+    @Column(insertable = false, updatable = false)
     private String type;
 
     private String email;

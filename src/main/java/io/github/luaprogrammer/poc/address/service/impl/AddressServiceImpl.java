@@ -2,60 +2,67 @@ package io.github.luaprogrammer.poc.address.service.impl;
 
 import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.repository.AddressRepository;
-import io.github.luaprogrammer.poc.address.rest.dto.AddressRequestDTO;
-import io.github.luaprogrammer.poc.address.rest.dto.AddressResponseDTO;
+import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
+import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
-    private final AddressRepository addressRepository;
+    private final AddressRepository aRepository;
 
     @Override
-    public List<AddressResponseDTO> findAllAddress(Pageable pageable) {
-        return addressRepository.findAll(pageable).stream().map(AddressResponseDTO::convertForDto).collect(Collectors.toList());
+    public Page<AddressResponseDTO> findAllAddress(Pageable pageable) {
+        return aRepository.findAll(pageable).map(AddressResponseDTO::convertForDto);
     }
 
     @Override
-    public Optional<Address> findAddressById(UUID id) {
-        return addressRepository.findById(id);
+    public AddressResponseDTO findAddressById(UUID id) {
+        Optional<Address> address = aRepository.findById(id);
+        if (address.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        return AddressResponseDTO.convertForDto(address.get());
     }
 
     @Override
     public AddressResponseDTO saveAddress(AddressRequestDTO requestAddress) {
-        Address addressSaved = addressRepository.save(requestAddress.convertForEntity());
+        Address addressSaved = aRepository.save(requestAddress.convertForEntity());
         return AddressResponseDTO.convertForDto(addressSaved);
     }
 
     @Override
-    public Address updateAddress(UUID id, Address address) {
-        Address addressSaved = validateAddress(id);
-        BeanUtils.copyProperties(address, addressSaved);
-        return addressRepository.save(addressSaved);
+    public AddressResponseDTO updateAddress(UUID id, AddressRequestDTO address) {
+        Optional<Address> addressSaved = aRepository.findById(id);
+        if (addressSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        } else {
+            BeanUtils.copyProperties(address, addressSaved);
+        }
+
+        Address addressUpdate = address.convertForEntity(id);
+        Address newAddress = aRepository.save(addressUpdate);
+        return AddressResponseDTO.convertForDto(newAddress);
     }
 
 
     @Override
     public void deleteAddress(UUID id) {
-        addressRepository.deleteById(id);
+        Optional<Address> address = aRepository.findById(id);
+        if (address.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+        aRepository.deleteById(address.get().getId());
     }
 
-    private Address validateAddress(UUID id) {
-        Optional<Address> addressByCode = findAddressById(id);
-        if (addressByCode.isEmpty()) {
-            throw new EmptyResultDataAccessException(1);
-        }
-        return addressByCode.get();
-    }
 }

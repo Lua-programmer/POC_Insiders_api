@@ -1,7 +1,8 @@
 package io.github.luaprogrammer.poc.customer.rest.controller;
 
-import io.github.luaprogrammer.poc.customer.rest.dto.CorporateCustomerRequestDTO;
-import io.github.luaprogrammer.poc.customer.rest.dto.CustomerResponseDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.impl.CustomerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,12 +41,41 @@ public class CustomerController {
 
     @PutMapping("/corporations/{id}")
     public ResponseEntity<CustomerResponseDTO> updateCorporateCustomer(@PathVariable UUID id, @RequestBody CorporateCustomerRequestDTO requestCustomer) {
-        return ResponseEntity.ok(customerService.updateCorporateCustomer(id, requestCustomer));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(customerService.updateCorporateCustomer(id, requestCustomer));
     }
 
     @DeleteMapping("corporations/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCorporateCustomer(@PathVariable UUID id) {
         customerService.deleteCorporateCustomer(id);
+    }
+
+    @PostMapping("/individual")
+    public ResponseEntity<CustomerResponseDTO> createIndividualCustomer(@RequestBody IndividualCustomerRequestDTO requestCustomer) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveIndividualCustomer(requestCustomer));
+    }
+
+    @GetMapping("/individual")
+
+    public ResponseEntity<Page<CustomerResponseDTO>> readAllIndividualCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllIndividualCustomer(pageable));
+    }
+
+    @GetMapping("/individual/{id}")
+    public ResponseEntity<CustomerResponseDTO> readIndividualCustomerById(@PathVariable UUID id) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.findIndividualCustomerById(id));
+    }
+
+    @PutMapping("/individual/{id}")
+    public ResponseEntity<CustomerResponseDTO> updateIndividualCustomer(@PathVariable UUID id, @RequestBody IndividualCustomerRequestDTO requestCustomer) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(customerService.updateIndividualCustomer(id, requestCustomer));
+    }
+
+    @DeleteMapping("individual/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteIndividualCustomer(@PathVariable UUID id) {
+        customerService.deleteIndividualCustomer(id);
     }
 }

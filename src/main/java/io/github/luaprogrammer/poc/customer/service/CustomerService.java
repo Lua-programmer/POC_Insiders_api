@@ -1,7 +1,8 @@
 package io.github.luaprogrammer.poc.customer.service;
 
-import io.github.luaprogrammer.poc.customer.rest.dto.CorporateCustomerRequestDTO;
-import io.github.luaprogrammer.poc.customer.rest.dto.CustomerResponseDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,4 +18,14 @@ public interface CustomerService {
     CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer);
 
     void deleteCorporateCustomer(UUID id);
+
+    Page<CustomerResponseDTO> findAllIndividualCustomer(Pageable pageable);
+
+    CustomerResponseDTO findIndividualCustomerById(UUID id);
+
+    CustomerResponseDTO saveIndividualCustomer(IndividualCustomerRequestDTO customer);
+
+    CustomerResponseDTO updateIndividualCustomer(UUID id, IndividualCustomerRequestDTO customer);
+
+    void deleteIndividualCustomer(UUID id);
 }

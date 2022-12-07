@@ -1,4 +1,4 @@
-package io.github.luaprogrammer.poc.address.rest.dto;
+package io.github.luaprogrammer.poc.address.rest.dto.response;
 
 import io.github.luaprogrammer.poc.address.entity.Address;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 public class AddressResponseDTO {
-    private UUID addressId;
+    private UUID id;
 
     private String cep;
 

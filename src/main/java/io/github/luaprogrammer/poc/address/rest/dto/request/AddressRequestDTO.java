@@ -1,4 +1,4 @@
-package io.github.luaprogrammer.poc.address.rest.dto;
+package io.github.luaprogrammer.poc.address.rest.dto.request;
 
 import io.github.luaprogrammer.poc.address.entity.Address;
 import lombok.Data;

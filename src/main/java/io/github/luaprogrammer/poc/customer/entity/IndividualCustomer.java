@@ -16,16 +16,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "F")
-public class IndividualCustomer extends Customer{
+public class IndividualCustomer extends Customer {
 
     private String cpf;
 
-    public IndividualCustomer(UUID id, String name, String type, String email, Long phone, LocalDateTime createdAt, String cpf) {
+    public IndividualCustomer(UUID id, String name, String email, Long phone, LocalDateTime createdAt, String cpf) {
         super(id, name, email, phone, createdAt);
         this.cpf = cpf;
     }
 
-    public IndividualCustomer(String name, String type, String email, Long phone, LocalDateTime createdAt, String cpf) {
+    public IndividualCustomer(String name, String email, Long phone, LocalDateTime createdAt, String cpf) {
         super(name, email, phone, createdAt);
         this.cpf = cpf;
     }

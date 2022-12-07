@@ -1,4 +1,4 @@
-package io.github.luaprogrammer.poc.customer.rest.dto;
+package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
 import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import lombok.Data;
