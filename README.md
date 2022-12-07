@@ -46,15 +46,19 @@
 </tr>
 <tr>
 	<td>spring-boot-starter-web</td>
-	<td>2.7.5</td>
+	<td>3.0.0</td>
 </tr>
 <tr>
 	<td>spring-boot-starter-data-jpa</td>
-	<td>2.7.5</td>
+	<td>3.0.0</td>
 </tr>
 <tr>
 	<td>spring-boot-starter-devtools</td>
-	<td>2.7.5</td>
+	<td>3.0.0</td>
+</tr>
+<tr>
+	<td>spring-boot-starter-validation</td>
+	<td>3.0.0</td>
 </tr>
 <tr>
 	<td>lombok</td>
