@@ -37,7 +37,6 @@ public abstract class Customer implements Serializable {
 
     @Column(insertable = false, updatable = false)
     private String type;
-
     private String email;
 
     private Long phone;

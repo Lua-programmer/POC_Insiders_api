@@ -4,6 +4,7 @@ package io.github.luaprogrammer.poc.address.rest.controller;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class AddressController {
     private final AddressServiceImpl addressService;
 
     @PostMapping
-    public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody AddressRequestDTO requestAddress) {
+    public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody @Valid AddressRequestDTO requestAddress) {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.saveAddress(requestAddress));
     }
 
@@ -40,7 +41,7 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable UUID id, @RequestBody AddressRequestDTO requestAddress) {
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable UUID id, @RequestBody @Valid AddressRequestDTO requestAddress) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(addressService.updateAddress(id, requestAddress));
     }

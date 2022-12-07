@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @DiscriminatorValue(value = "J")
 public class CorporateCustomer extends Customer {
-
     private String cnpj;
 
     public CorporateCustomer(UUID id, String name, String email, Long phone, LocalDateTime createdAt, String cnpj) {

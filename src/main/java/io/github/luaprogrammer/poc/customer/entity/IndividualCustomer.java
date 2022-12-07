@@ -17,7 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @DiscriminatorValue(value = "F")
 public class IndividualCustomer extends Customer {
-
     private String cpf;
 
     public IndividualCustomer(UUID id, String name, String email, Long phone, LocalDateTime createdAt, String cpf) {

@@ -4,6 +4,7 @@ import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRe
 import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.impl.CustomerServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class CustomerController {
     private final CustomerServiceImpl customerService;
 
     @PostMapping("/corporations")
-    public ResponseEntity<CustomerResponseDTO> createCorporateCustomer(@RequestBody CorporateCustomerRequestDTO requestCustomer) {
+    public ResponseEntity<CustomerResponseDTO> createCorporateCustomer(@RequestBody @Valid CorporateCustomerRequestDTO requestCustomer) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveCorporateCustomer(requestCustomer));
     }
 
@@ -40,7 +41,7 @@ public class CustomerController {
     }
 
     @PutMapping("/corporations/{id}")
-    public ResponseEntity<CustomerResponseDTO> updateCorporateCustomer(@PathVariable UUID id, @RequestBody CorporateCustomerRequestDTO requestCustomer) {
+    public ResponseEntity<CustomerResponseDTO> updateCorporateCustomer(@PathVariable UUID id, @RequestBody @Valid CorporateCustomerRequestDTO requestCustomer) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(customerService.updateCorporateCustomer(id, requestCustomer));
     }
@@ -52,7 +53,7 @@ public class CustomerController {
     }
 
     @PostMapping("/individual")
-    public ResponseEntity<CustomerResponseDTO> createIndividualCustomer(@RequestBody IndividualCustomerRequestDTO requestCustomer) {
+    public ResponseEntity<CustomerResponseDTO> createIndividualCustomer(@RequestBody @Valid IndividualCustomerRequestDTO requestCustomer) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveIndividualCustomer(requestCustomer));
     }
 
@@ -68,7 +69,7 @@ public class CustomerController {
     }
 
     @PutMapping("/individual/{id}")
-    public ResponseEntity<CustomerResponseDTO> updateIndividualCustomer(@PathVariable UUID id, @RequestBody IndividualCustomerRequestDTO requestCustomer) {
+    public ResponseEntity<CustomerResponseDTO> updateIndividualCustomer(@PathVariable UUID id, @RequestBody @Valid IndividualCustomerRequestDTO requestCustomer) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(customerService.updateIndividualCustomer(id, requestCustomer));
     }
