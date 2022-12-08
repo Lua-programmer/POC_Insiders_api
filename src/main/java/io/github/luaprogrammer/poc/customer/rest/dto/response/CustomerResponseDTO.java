@@ -1,14 +1,18 @@
 package io.github.luaprogrammer.poc.customer.rest.dto.response;
 
-import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
-import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
+import io.github.luaprogrammer.poc.address.entity.Address;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.modelmapper.ModelMapper;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
-public class CustomerResponseDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public abstract class CustomerResponseDTO {
 
     private UUID customerId;
 
@@ -18,13 +22,5 @@ public class CustomerResponseDTO {
 
     private Long phone;
 
-    public static CustomerResponseDTO convertForDto(IndividualCustomer customer) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(customer, CustomerResponseDTO.class);
-    }
-
-    public static CustomerResponseDTO convertForDto(CorporateCustomer customer) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(customer, CustomerResponseDTO.class);
-    }
+    private List<Address> addresses = new ArrayList<>();
 }

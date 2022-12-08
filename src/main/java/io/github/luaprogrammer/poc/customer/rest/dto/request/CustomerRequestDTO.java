@@ -1,5 +1,6 @@
 package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
+import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,4 +23,6 @@ public abstract class CustomerRequestDTO {
 
     @NotNull(message = "phone is required")
     private Long phone;
+
+    private AddressRequestDTO address;
 }

@@ -1,11 +1,13 @@
 package io.github.luaprogrammer.poc.customer.entity;
 
+import io.github.luaprogrammer.poc.address.entity.Address;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

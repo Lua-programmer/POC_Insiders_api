@@ -9,6 +9,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -44,9 +45,9 @@ public abstract class Customer implements Serializable {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 
     public Customer(UUID id, String name, String email, Long phone, LocalDateTime createdAt) {
         this.id = id;
@@ -61,6 +62,15 @@ public abstract class Customer implements Serializable {
         this.email = email;
         this.phone = phone;
         this.createdAt = createdAt;
+    }
+
+    public Customer(UUID id, String name, String email, Long phone, LocalDateTime createdAt, List<Address> addresses) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.createdAt = createdAt;
+        this.addresses = addresses;
     }
 
     @Override

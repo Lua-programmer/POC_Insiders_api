@@ -1,7 +1,10 @@
 package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
+import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -15,11 +18,10 @@ public class IndividualCustomerRequestDTO extends CustomerRequestDTO {
     @CPF(message = "cpf invalid")
     private String cpf;
 
-    public IndividualCustomerRequestDTO(String name, String email, Long phone, String cpf) {
-        super(name, email, phone);
+    public IndividualCustomerRequestDTO(String name, String email,  Long phone, AddressRequestDTO address, String cpf) {
+        super(name, email, phone, address);
         this.cpf = cpf;
     }
-
 
     public IndividualCustomer convertCPForEntity() {
         return new IndividualCustomer(getName(), getEmail(), getPhone(), LocalDateTime.now(), cpf);
