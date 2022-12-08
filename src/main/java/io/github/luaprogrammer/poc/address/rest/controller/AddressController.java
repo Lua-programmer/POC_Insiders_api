@@ -1,6 +1,7 @@
 package io.github.luaprogrammer.poc.address.rest.controller;
 
 
+import com.google.gson.Gson;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
@@ -14,6 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.UUID;
 
 @RestController
@@ -24,7 +30,7 @@ public class AddressController {
     private final AddressServiceImpl addressService;
 
     @PostMapping
-    public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody @Valid AddressRequestDTO requestAddress) {
+    public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody @Valid AddressRequestDTO requestAddress) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.saveAddress(requestAddress));
     }
 
