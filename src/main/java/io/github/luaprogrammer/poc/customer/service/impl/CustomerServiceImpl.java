@@ -1,7 +1,6 @@
 package io.github.luaprogrammer.poc.customer.service.impl;
 
 
-import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
@@ -35,11 +34,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerResponseDTO> findAllCorporateCustomer(Pageable pageable) {
-        return cRepository.findAll(pageable).map(CorporateCustomerResponseDTO::convertForDto);
+        return cRepository.findAll(pageable).map(CustomerResponseDTO::convertForDto);
     }
 
     @Override
-    public CustomerResponseDTO findCorporateCustomerById(UUID id) {
+    public CorporateCustomerResponseDTO findCorporateCustomerById(UUID id) {
         Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
         if (corporateCustomer.isEmpty()) {
             throw new RuntimeException("id not found");
@@ -48,29 +47,28 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CorporateCustomerResponseDTO saveCorporateCustomer(CorporateCustomerRequestDTO customer) {
+    public CustomerResponseDTO saveCorporateCustomer(CorporateCustomerRequestDTO customer) {
         CorporateCustomer corporateCustomer = cRepository.save(customer.convertCNPJForEntity());
-        return CorporateCustomerResponseDTO.convertForDto(corporateCustomer);
+        return CustomerResponseDTO.convertForDto(corporateCustomer);
     }
 
     @Override
-    public CustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-        CustomerResponseDTO customerUpdated = saveAddressForCustomer(id, addressRequest);
-        CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity((CorporateCustomerResponseDTO) customerUpdated);
+    public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+        CorporateCustomerResponseDTO customerUpdated = saveAddressForCustomer(id, addressRequest);
+        CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customerUpdated);
         CorporateCustomer save = cRepository.save(corporateCustomer);
         return CorporateCustomerResponseDTO.convertForDto(save);
     }
 
 
-    private CustomerResponseDTO saveAddressForCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+    private CorporateCustomerResponseDTO saveAddressForCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
             throw new RuntimeException("id not found");
         }
-        CustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
+        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
         AddressResponseDTO addressSaved = addressService.saveAddress(addressRequest);
-        Address address = AddressResponseDTO.convertForEntity(addressSaved);
-        customer.getAddresses().add(address);
+        customer.getAddresses().add(addressSaved);
         return customer;
     }
 

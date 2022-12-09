@@ -7,6 +7,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public abstract class Customer implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Address> addresses = new ArrayList<>();
+    private List<Address> addresses;
 
     public Customer(UUID id, String name, String email, Long phone, LocalDateTime createdAt) {
         this.id = id;
