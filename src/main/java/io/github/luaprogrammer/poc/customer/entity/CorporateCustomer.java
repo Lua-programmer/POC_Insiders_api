@@ -2,8 +2,6 @@ package io.github.luaprogrammer.poc.customer.entity;
 
 
 import io.github.luaprogrammer.poc.address.entity.Address;
-import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
-import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -13,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

@@ -5,6 +5,7 @@ import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRe
 import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.impl.CustomerServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +72,13 @@ public class CustomerController {
     }
 
     @GetMapping("/individual/{id}")
-    public ResponseEntity<CustomerResponseDTO> readIndividualCustomerById(@PathVariable UUID id) {
+    public ResponseEntity<IndividualCustomerResponseDTO> readIndividualCustomerById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findIndividualCustomerById(id));
+    }
+
+    @PatchMapping("/individual/{id}/add-address")
+    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressIndividualCustomer(id, addressRequest));
     }
 
     @PutMapping("/individual/{id}")
