@@ -1,7 +1,9 @@
 package io.github.luaprogrammer.poc.customer.rest.controller;
 
+import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.impl.CustomerServiceImpl;
 import jakarta.validation.Valid;
@@ -35,15 +37,20 @@ public class CustomerController {
     }
 
     @GetMapping("/corporations/{id}")
-    public ResponseEntity<CustomerResponseDTO> readCorporateCustomerById(@PathVariable UUID id) {
+    public ResponseEntity<CorporateCustomerResponseDTO> readCorporateCustomerById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findCorporateCustomerById(id));
 
     }
 
     @PutMapping("/corporations/{id}")
     public ResponseEntity<CustomerResponseDTO> updateCorporateCustomer(@PathVariable UUID id, @RequestBody @Valid CorporateCustomerRequestDTO requestCustomer) {
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(customerService.updateCorporateCustomer(id, requestCustomer));
+    }
+
+    @PatchMapping("/corporations/{id}/add-address")
+    public ResponseEntity<CorporateCustomerResponseDTO> addAddressCorporateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressCorporateCustomer(id, addressRequest));
     }
 
     @DeleteMapping("corporations/{id}")

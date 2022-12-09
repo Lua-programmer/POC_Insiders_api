@@ -1,13 +1,18 @@
 package io.github.luaprogrammer.poc.customer.service.impl;
 
 
+import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
+import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
+import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
 import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
 import io.github.luaprogrammer.poc.customer.repository.CorporateCustomerRepository;
 import io.github.luaprogrammer.poc.customer.repository.IndividualCustomerRepository;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRequestDTO;
-import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerResponseDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
+import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -25,24 +30,46 @@ public class CustomerServiceImpl implements CustomerService {
     private final CorporateCustomerRepository cRepository;
     private final IndividualCustomerRepository iRepository;
 
+    private final AddressServiceImpl addressService;
+
     @Override
     public Page<CustomerResponseDTO> findAllCorporateCustomer(Pageable pageable) {
         return cRepository.findAll(pageable).map(CustomerResponseDTO::convertForDto);
     }
 
     @Override
-    public CustomerResponseDTO findCorporateCustomerById(UUID id) {
+    public CorporateCustomerResponseDTO findCorporateCustomerById(UUID id) {
         Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
         if (corporateCustomer.isEmpty()) {
             throw new RuntimeException("id not found");
         }
-        return CustomerResponseDTO.convertForDto(corporateCustomer.get());
+        return CorporateCustomerResponseDTO.convertForDto(corporateCustomer.get());
     }
 
     @Override
     public CustomerResponseDTO saveCorporateCustomer(CorporateCustomerRequestDTO customer) {
         CorporateCustomer corporateCustomer = cRepository.save(customer.convertCNPJForEntity());
         return CustomerResponseDTO.convertForDto(corporateCustomer);
+    }
+
+    @Override
+    public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+        CorporateCustomerResponseDTO customerUpdated = saveAddressForCustomer(id, addressRequest);
+        CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customerUpdated);
+        CorporateCustomer save = cRepository.save(corporateCustomer);
+        return CorporateCustomerResponseDTO.convertForDto(save);
+    }
+
+
+    private CorporateCustomerResponseDTO saveAddressForCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+        Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
+        if (corporateCustomerSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
+        AddressResponseDTO addressSaved = addressService.saveAddress(addressRequest);
+        customer.getAddresses().add(addressSaved);
+        return customer;
     }
 
     @Override
@@ -56,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         CorporateCustomer corporateCustomerupdate = customer.convertCNPJForEntity(id);
         CorporateCustomer newCorporateCustomer = cRepository.save(corporateCustomerupdate);
-        return CustomerResponseDTO.convertForDto(newCorporateCustomer);
+        return CorporateCustomerResponseDTO.convertForDto(newCorporateCustomer);
     }
 
     @Override
@@ -70,7 +97,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerResponseDTO> findAllIndividualCustomer(Pageable pageable) {
-        return iRepository.findAll(pageable).map(CustomerResponseDTO::convertForDto);
+        return iRepository.findAll(pageable).map(IndividualCustomerResponseDTO::convertForDto);
     }
 
     @Override
@@ -79,13 +106,13 @@ public class CustomerServiceImpl implements CustomerService {
         if (individualCustomer.isEmpty()) {
             throw new RuntimeException("id not found");
         }
-        return CustomerResponseDTO.convertForDto(individualCustomer.get());
+        return IndividualCustomerResponseDTO.convertForDto(individualCustomer.get());
     }
 
     @Override
     public CustomerResponseDTO saveIndividualCustomer(IndividualCustomerRequestDTO customer) {
         IndividualCustomer individualCustomer = iRepository.save(customer.convertCPForEntity());
-        return CustomerResponseDTO.convertForDto(individualCustomer);
+        return IndividualCustomerResponseDTO.convertForDto(individualCustomer);
     }
 
     @Override
@@ -99,7 +126,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         IndividualCustomer individualCustomerupdate = customer.convertCPForEntity(id);
         IndividualCustomer newIndividualCustomer = iRepository.save(individualCustomerupdate);
-        return CustomerResponseDTO.convertForDto(newIndividualCustomer);
+        return IndividualCustomerResponseDTO.convertForDto(newIndividualCustomer);
     }
 
     @Override

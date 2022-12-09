@@ -1,5 +1,6 @@
 package io.github.luaprogrammer.poc.customer.service;
 
+import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
@@ -16,6 +17,8 @@ public interface CustomerService {
     CustomerResponseDTO saveCorporateCustomer(CorporateCustomerRequestDTO customer);
 
     CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer);
+
+    CustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception;
 
     void deleteCorporateCustomer(UUID id);
 
