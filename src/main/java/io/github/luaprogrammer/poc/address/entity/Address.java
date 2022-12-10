@@ -8,6 +8,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -17,11 +18,11 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
-@Table(name = "address")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -49,7 +50,7 @@ public class Address implements Serializable {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId")
     @ToString.Exclude
     private Customer customer;

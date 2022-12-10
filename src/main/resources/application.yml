@@ -5,7 +5,7 @@ spring:
     active: dev
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view:
   main:
     banner-mode: off

@@ -2,6 +2,7 @@ package io.github.luaprogrammer.poc.address.rest.controller;
 
 
 import com.google.gson.Gson;
+import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
@@ -30,7 +31,7 @@ public class AddressController {
     private final AddressServiceImpl addressService;
 
     @PostMapping
-    public ResponseEntity<AddressResponseDTO> createAddress(@RequestBody @Valid AddressRequestDTO requestAddress) throws Exception {
+    public ResponseEntity<Address> createAddress(@RequestBody @Valid AddressRequestDTO requestAddress) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.saveAddress(requestAddress));
     }
 

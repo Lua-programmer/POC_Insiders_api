@@ -1,6 +1,8 @@
 package io.github.luaprogrammer.poc.customer.service.impl;
 
 
+import io.github.luaprogrammer.poc.address.entity.Address;
+import io.github.luaprogrammer.poc.address.repository.AddressRepository;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
@@ -54,43 +56,59 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-        CorporateCustomerResponseDTO customerUpdated = saveAddressForCorporateCustomer(id, addressRequest);
-        CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customerUpdated);
-        CorporateCustomer save = cRepository.save(corporateCustomer);
-        return CorporateCustomerResponseDTO.convertForDto(save);
-    }
-
-
-    private CorporateCustomerResponseDTO saveAddressForCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
             throw new RuntimeException("id not found");
         }
-        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
-        AddressResponseDTO addressSaved = addressService.saveAddress(addressRequest);
+
+        CorporateCustomer customer = corporateCustomerSaved.get();
+//        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
+        addressRequest.setCustomerId(customer.getId());
+        Address addressSaved = addressService.saveAddress(addressRequest);
+        // CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customer);
         customer.getAddresses().add(addressSaved);
-        return customer;
-    }
 
-    @Override
-    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-        IndividualCustomerResponseDTO customerUpdated = saveAddressForIndividualCustomer(id, addressRequest);
-        IndividualCustomer individualCustomer = IndividualCustomerRequestDTO.convertForEntity(customerUpdated);
-        IndividualCustomer save = iRepository.save(individualCustomer);
-        return IndividualCustomerResponseDTO.convertForDto(save);
+        CorporateCustomer customerUpdated = cRepository.save(customer);
+        return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
     }
 
 
-    private IndividualCustomerResponseDTO saveAddressForIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-        Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
-        if (individualCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        IndividualCustomerResponseDTO customer = IndividualCustomerResponseDTO.convertForDto(individualCustomerSaved.get());
-        AddressResponseDTO addressSaved = addressService.saveAddress(addressRequest);
-        customer.getAddresses().add(addressSaved);
-        return customer;
-    }
+//    private CorporateCustomerResponseDTO saveAddressForCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+//        Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
+//        if (corporateCustomerSaved.isEmpty()) {
+//            throw new RuntimeException("id not found");
+//        }
+//
+//         CorporateCustomer customer = corporateCustomerSaved.get();
+////        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
+//        addressRequest.setCustomerId(customer.getId());
+//        Address addressSaved = addressService.saveAddress(addressRequest);
+//       // CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customer);
+//        customer.getAddresses().add(addressSaved);
+//
+//        CorporateCustomer customerUpdated = cRepository.save(customer);
+//        return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
+//    }
+
+//    @Override
+//    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+//        IndividualCustomerResponseDTO customerUpdated = saveAddressForIndividualCustomer(id, addressRequest);
+//        IndividualCustomer individualCustomer = IndividualCustomerRequestDTO.convertForEntity(customerUpdated);
+//        IndividualCustomer save = iRepository.save(individualCustomer);
+//        return IndividualCustomerResponseDTO.convertForDto(save);
+//    }
+
+
+//    private IndividualCustomerResponseDTO saveAddressForIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+//        Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
+//        if (individualCustomerSaved.isEmpty()) {
+//            throw new RuntimeException("id not found");
+//        }
+//        IndividualCustomerResponseDTO customer = IndividualCustomerResponseDTO.convertForDto(individualCustomerSaved.get());
+//        Address addressSaved = addressService.saveAddress(addressRequest);
+//        customer.getAddresses().add(addressSaved);
+//        return customer;
+//    }
 
     @Override
     public CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer) {

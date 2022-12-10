@@ -1,10 +1,12 @@
 package io.github.luaprogrammer.poc.address.rest.dto.request;
 
 import io.github.luaprogrammer.poc.address.entity.Address;
+import io.github.luaprogrammer.poc.customer.entity.Customer;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.internal.bytebuddy.asm.Advice;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +31,8 @@ public class AddressRequestDTO {
     private String uf;
 
     private Boolean isPrincipal = false;
+
+    private UUID customerId;
 
 
     public Address convertForEntity() {

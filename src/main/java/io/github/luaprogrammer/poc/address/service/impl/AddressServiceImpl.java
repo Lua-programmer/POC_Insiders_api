@@ -6,6 +6,7 @@ import io.github.luaprogrammer.poc.address.repository.AddressRepository;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.AddressService;
+import io.github.luaprogrammer.poc.customer.entity.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressResponseDTO saveAddress(AddressRequestDTO requestAddress) throws Exception {
+    public Address saveAddress(AddressRequestDTO requestAddress) throws Exception {
 
 
         URL url = new URL("https://viacep.com.br/ws/"+requestAddress.getCep()+"/json/");
@@ -64,9 +64,10 @@ public class AddressServiceImpl implements AddressService {
         requestAddress.setLocalidade(addressAux.getLocalidade());
         requestAddress.setUf(addressAux.getUf());
 
+        Address address = requestAddress.convertForEntity();
+        address.setCustomer(Customer.builder().id(requestAddress.getCustomerId()).build());
 
-        Address addressSaved = aRepository.save(requestAddress.convertForEntity());
-        return AddressResponseDTO.convertForDto(addressSaved);
+        return aRepository.save(address);
     }
 
     @Override
