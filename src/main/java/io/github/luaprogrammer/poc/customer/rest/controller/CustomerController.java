@@ -60,6 +60,12 @@ public class CustomerController {
         customerService.deleteCorporateCustomer(id);
     }
 
+    @DeleteMapping("corporations/{id}/delete-address")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddressCorporateCustomer(@PathVariable UUID id) {
+        customerService.deleteAddressCorporateCustomer(id);
+    }
+
     @PostMapping("/individual")
     public ResponseEntity<CustomerResponseDTO> createIndividualCustomer(@RequestBody @Valid IndividualCustomerRequestDTO requestCustomer) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveIndividualCustomer(requestCustomer));

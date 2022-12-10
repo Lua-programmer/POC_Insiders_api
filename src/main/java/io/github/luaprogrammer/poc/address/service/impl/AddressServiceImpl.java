@@ -46,14 +46,14 @@ public class AddressServiceImpl implements AddressService {
     public Address saveAddress(AddressRequestDTO requestAddress) throws Exception {
 
 
-        URL url = new URL("https://viacep.com.br/ws/"+requestAddress.getCep()+"/json/");
+        URL url = new URL("https://viacep.com.br/ws/" + requestAddress.getCep() + "/json/");
         URLConnection connection = url.openConnection();
         InputStream is = connection.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
         String cep = "";
         StringBuilder jsonCep = new StringBuilder();
-        while((cep = reader.readLine()) != null) {
+        while ((cep = reader.readLine()) != null) {
             jsonCep.append(cep);
         }
 
@@ -65,8 +65,6 @@ public class AddressServiceImpl implements AddressService {
         requestAddress.setUf(addressAux.getUf());
 
         Address address = requestAddress.convertForEntity();
-        address.setCustomer(Customer.builder().id(requestAddress.getCustomerId()).build());
-
         return aRepository.save(address);
     }
 
@@ -90,6 +88,9 @@ public class AddressServiceImpl implements AddressService {
         Optional<Address> address = aRepository.findById(id);
         if (address.isEmpty()) {
             throw new RuntimeException("id not found");
+        }
+        if (address.get().getCustomer() != null) {
+            throw new RuntimeException("Endereço não pode ser excluído pois existe um Customer atrelado a ele.");
         }
         aRepository.deleteById(address.get().getId());
     }
