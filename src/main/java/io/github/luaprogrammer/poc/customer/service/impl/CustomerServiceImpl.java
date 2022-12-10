@@ -4,9 +4,9 @@ package io.github.luaprogrammer.poc.customer.service.impl;
 import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.repository.AddressRepository;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
-import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
 import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
+import io.github.luaprogrammer.poc.customer.entity.Customer;
 import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
 import io.github.luaprogrammer.poc.customer.repository.CorporateCustomerRepository;
 import io.github.luaprogrammer.poc.customer.repository.IndividualCustomerRepository;
@@ -16,6 +16,7 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerR
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CorporateCustomerRepository cRepository;
     private final IndividualCustomerRepository iRepository;
+
+    private final AddressRepository aRepository;
 
     private final AddressServiceImpl addressService;
 
@@ -62,14 +65,25 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         CorporateCustomer customer = corporateCustomerSaved.get();
-//        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
         addressRequest.setCustomerId(customer.getId());
         Address addressSaved = addressService.saveAddress(addressRequest);
-        // CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customer);
-        customer.getAddresses().add(addressSaved);
 
+        addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
+
+        customer.getAddresses().add(addressSaved);
         CorporateCustomer customerUpdated = cRepository.save(customer);
         return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
+    }
+
+    public void deleteAddressCorporateCustomer(UUID id) {
+        Optional<Address> addressSaved = aRepository.findById(id);
+        if (addressSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        addressSaved.get().setCustomer(null);
+        aRepository.save(addressSaved.get());
+        addressService.deleteAddress(addressSaved.get().getId());
     }
 
 
