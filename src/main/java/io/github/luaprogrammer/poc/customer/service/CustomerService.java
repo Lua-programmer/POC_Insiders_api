@@ -19,7 +19,7 @@ public interface CustomerService {
     CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer);
 
     CustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception;
-    CustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception;
+//    CustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception;
 
     void deleteCorporateCustomer(UUID id);
 

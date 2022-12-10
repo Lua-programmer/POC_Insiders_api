@@ -66,7 +66,6 @@ public class CustomerController {
     }
 
     @GetMapping("/individual")
-
     public ResponseEntity<Page<CustomerResponseDTO>> readAllIndividualCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllIndividualCustomer(pageable));
     }
@@ -76,10 +75,10 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findIndividualCustomerById(id));
     }
 
-    @PatchMapping("/individual/{id}/add-address")
-    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressIndividualCustomer(id, addressRequest));
-    }
+//    @PatchMapping("/individual/{id}/add-address")
+//    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressIndividualCustomer(id, addressRequest));
+//    }
 
     @PutMapping("/individual/{id}")
     public ResponseEntity<CustomerResponseDTO> updateIndividualCustomer(@PathVariable UUID id, @RequestBody @Valid IndividualCustomerRequestDTO requestCustomer) {

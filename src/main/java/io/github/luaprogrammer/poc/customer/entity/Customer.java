@@ -10,11 +10,11 @@ import org.hibernate.type.SqlTypes;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Builder
 @Getter
 @Setter
 @ToString
@@ -25,8 +25,9 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("P")
-public abstract class Customer implements Serializable {
+public class Customer implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -47,7 +48,7 @@ public abstract class Customer implements Serializable {
     private LocalDateTime createdAt;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.ALL)
-    @ToString.Exclude
+//    @ToString.Exclude
     private List<Address> addresses;
 
     public Customer(UUID id, String name, String email, Long phone, LocalDateTime createdAt) {
@@ -63,15 +64,6 @@ public abstract class Customer implements Serializable {
         this.email = email;
         this.phone = phone;
         this.createdAt = createdAt;
-    }
-
-    public Customer(UUID id, String name, String email, Long phone, LocalDateTime createdAt, List<Address> addresses) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.createdAt = createdAt;
-        this.addresses = addresses;
     }
 
     @Override

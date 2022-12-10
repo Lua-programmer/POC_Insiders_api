@@ -1,17 +1,14 @@
 package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
-import io.github.luaprogrammer.poc.address.entity.Address;
-import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerResponseDTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CNPJ;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -32,16 +29,18 @@ public class CorporateCustomerRequestDTO extends CustomerRequestDTO {
     }
 
     public static CorporateCustomer convertForEntity(CorporateCustomerResponseDTO customer) {
-
-        List<Address> addresses = new ArrayList();
-        for (int i = 0; i < customer.getAddresses().size(); i++) {
-            Address address = AddressResponseDTO.convertForEntity(customer.getAddresses().get(i));
-            addresses.add(address);
-        }
-
-        return new CorporateCustomer(customer.getId(), customer.getName(), customer.getType(), customer.getEmail(),
-                customer.getPhone(), LocalDateTime.now(), addresses,
-                customer.getCnpj());
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(customer, CorporateCustomer.class);
+//
+//        List<Address> addresses = new ArrayList();
+//        for (int i = 0; i < customer.getAddresses().size(); i++) {
+//            Address address = AddressResponseDTO.convertForEntity(customer.getAddresses().get(i));
+//            addresses.add(address);
+//        }
+//
+//        return new CorporateCustomer(customer.getId(), customer.getName(), customer.getType(), customer.getEmail(),
+//                customer.getPhone(), LocalDateTime.now(), addresses,
+//                customer.getCnpj());
     }
 
 
