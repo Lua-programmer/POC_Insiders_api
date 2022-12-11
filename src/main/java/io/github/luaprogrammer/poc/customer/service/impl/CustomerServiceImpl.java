@@ -4,6 +4,7 @@ package io.github.luaprogrammer.poc.customer.service.impl;
 import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.repository.AddressRepository;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
+import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
 import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import io.github.luaprogrammer.poc.customer.entity.Customer;
@@ -23,8 +24,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,34 +78,6 @@ public class CustomerServiceImpl implements CustomerService {
         return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
     }
 
-    public void deleteAddressCorporateCustomer(UUID id) {
-        Optional<Address> addressSaved = aRepository.findById(id);
-        if (addressSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-
-        addressSaved.get().setCustomer(null);
-        aRepository.save(addressSaved.get());
-        addressService.deleteAddress(addressSaved.get().getId());
-    }
-
-
-//    private CorporateCustomerResponseDTO saveAddressForCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-//        Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
-//        if (corporateCustomerSaved.isEmpty()) {
-//            throw new RuntimeException("id not found");
-//        }
-//
-//         CorporateCustomer customer = corporateCustomerSaved.get();
-////        CorporateCustomerResponseDTO customer = CorporateCustomerResponseDTO.convertForDto(corporateCustomerSaved.get());
-//        addressRequest.setCustomerId(customer.getId());
-//        Address addressSaved = addressService.saveAddress(addressRequest);
-//       // CorporateCustomer corporateCustomer = CorporateCustomerRequestDTO.convertForEntity(customer);
-//        customer.getAddresses().add(addressSaved);
-//
-//        CorporateCustomer customerUpdated = cRepository.save(customer);
-//        return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
-//    }
 
 //    @Override
 //    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
@@ -138,6 +113,20 @@ public class CustomerServiceImpl implements CustomerService {
         return CorporateCustomerResponseDTO.convertForDto(newCorporateCustomer);
     }
 
+    public CorporateCustomerResponseDTO updateAddressCorporateCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
+        Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
+        if (corporateCustomerSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        Optional<Address> addressIdSaved = aRepository.findById(addressId);
+
+        AddressResponseDTO addressResponseDTO = addressService.updateAddress(addressIdSaved.get().getId(), addressRequest);
+
+        UUID customerId = addressResponseDTO.getCustomerId();
+       return findCorporateCustomerById(customerId);
+    }
+
     @Override
     public void deleteCorporateCustomer(UUID id) {
         Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
@@ -145,6 +134,18 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException("id not found");
         }
         cRepository.deleteById(corporateCustomer.get().getId());
+    }
+
+    @Override
+    public void deleteAddressCorporateCustomer(UUID id) {
+        Optional<Address> addressSaved = aRepository.findById(id);
+        if (addressSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        addressSaved.get().setCustomer(null);
+        aRepository.save(addressSaved.get());
+        addressService.deleteAddress(addressSaved.get().getId());
     }
 
     @Override

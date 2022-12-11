@@ -48,7 +48,7 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable UUID id, @RequestBody @Valid AddressRequestDTO requestAddress) {
+    public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable UUID id, @RequestBody @Valid AddressRequestDTO requestAddress) throws Exception {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(addressService.updateAddress(id, requestAddress));
     }

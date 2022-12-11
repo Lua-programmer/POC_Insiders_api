@@ -15,7 +15,7 @@ public interface AddressService {
 
     Address saveAddress(AddressRequestDTO requestAddress) throws Exception;
 
-    AddressResponseDTO updateAddress(UUID id, AddressRequestDTO address);
+    AddressResponseDTO updateAddress(UUID id, AddressRequestDTO address) throws Exception;
 
     void deleteAddress(UUID id);
 }

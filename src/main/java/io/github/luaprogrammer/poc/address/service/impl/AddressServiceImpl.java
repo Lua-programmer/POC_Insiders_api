@@ -45,6 +45,42 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address saveAddress(AddressRequestDTO requestAddress) throws Exception {
 
+        Address address = validateCep(requestAddress);
+
+        return aRepository.save(address);
+    }
+
+    @Override
+    public AddressResponseDTO updateAddress(UUID id, AddressRequestDTO requestAddress) throws Exception {
+        Optional<Address> addressSaved = aRepository.findById(id);
+        if (addressSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        Address addressUpdated = validateCep(requestAddress);
+
+        BeanUtils.copyProperties(addressSaved, addressUpdated);
+        addressUpdated.setId(addressSaved.get().getId());
+        addressUpdated.setCustomer(addressSaved.get().getCustomer());
+
+        Address save = aRepository.save(addressUpdated);
+        return AddressResponseDTO.convertForDto(save);
+    }
+
+
+    @Override
+    public void deleteAddress(UUID id) {
+        Optional<Address> address = aRepository.findById(id);
+        if (address.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+        if (address.get().getCustomer() != null) {
+            throw new RuntimeException("Endereço não pode ser excluído pois existe um Customer atrelado a ele.");
+        }
+        aRepository.deleteById(address.get().getId());
+    }
+
+    private Address validateCep(AddressRequestDTO requestAddress) throws Exception {
 
         URL url = new URL("https://viacep.com.br/ws/" + requestAddress.getCep() + "/json/");
         URLConnection connection = url.openConnection();
@@ -64,35 +100,7 @@ public class AddressServiceImpl implements AddressService {
         requestAddress.setLocalidade(addressAux.getLocalidade());
         requestAddress.setUf(addressAux.getUf());
 
-        Address address = requestAddress.convertForEntity();
-        return aRepository.save(address);
-    }
-
-    @Override
-    public AddressResponseDTO updateAddress(UUID id, AddressRequestDTO address) {
-        Optional<Address> addressSaved = aRepository.findById(id);
-        if (addressSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
-        } else {
-            BeanUtils.copyProperties(address, addressSaved);
-        }
-
-        Address addressUpdate = address.convertForEntity(id);
-        Address newAddress = aRepository.save(addressUpdate);
-        return AddressResponseDTO.convertForDto(newAddress);
-    }
-
-
-    @Override
-    public void deleteAddress(UUID id) {
-        Optional<Address> address = aRepository.findById(id);
-        if (address.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        if (address.get().getCustomer() != null) {
-            throw new RuntimeException("Endereço não pode ser excluído pois existe um Customer atrelado a ele.");
-        }
-        aRepository.deleteById(address.get().getId());
+        return requestAddress.convertForEntity();
     }
 
 }

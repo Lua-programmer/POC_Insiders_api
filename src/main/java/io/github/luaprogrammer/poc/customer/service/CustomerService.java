@@ -23,6 +23,8 @@ public interface CustomerService {
 
     void deleteCorporateCustomer(UUID id);
 
+    void deleteAddressCorporateCustomer(UUID id);
+
     Page<CustomerResponseDTO> findAllIndividualCustomer(Pageable pageable);
 
     CustomerResponseDTO findIndividualCustomerById(UUID id);
