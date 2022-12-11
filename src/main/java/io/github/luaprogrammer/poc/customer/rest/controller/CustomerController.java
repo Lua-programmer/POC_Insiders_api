@@ -1,6 +1,7 @@
 package io.github.luaprogrammer.poc.customer.rest.controller;
 
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
+import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.CorporateCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.request.IndividualCustomerRequestDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerResponseDTO;
@@ -52,6 +53,11 @@ public class CustomerController {
     @PatchMapping("/corporations/{id}/add-address")
     public ResponseEntity<CorporateCustomerResponseDTO> addAddressCorporateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressCorporateCustomer(id, addressRequest));
+    }
+
+    @PatchMapping("/corporations/{id}/update-address/{addressId}")
+    public ResponseEntity<CorporateCustomerResponseDTO> updateAddressCorporateCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.updateAddressCorporateCustomer(id, addressId, addressRequest));
     }
 
     @DeleteMapping("corporations/{id}")
