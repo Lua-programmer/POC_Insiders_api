@@ -89,7 +89,7 @@ public class CustomerController {
 
     @PutMapping("/individual/{id}")
     public ResponseEntity<CustomerResponseDTO> updateIndividualCustomer(@PathVariable UUID id, @RequestBody @Valid IndividualCustomerRequestDTO requestCustomer) {
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(customerService.updateIndividualCustomer(id, requestCustomer));
     }
 
