@@ -61,6 +61,12 @@ public class AddressServiceImpl implements AddressService {
         if (Boolean.TRUE.equals(requestAddress.getIsPrincipal())) {
             throw new RuntimeException("Já existe um endereço principal para este usuário");
         }
+        for (int i = 0; i < addressSaved.get().getCustomer().getAddresses().size(); i++) {
+            if (addressSaved.get().getCustomer().getAddresses().get(i).getLogradouro().equals(requestAddress.getLogradouro())
+            && !addressSaved.get().getCustomer().getAddresses().get(i).getId().equals(id)) {
+                throw new RuntimeException("Esse cep já está cadastrado para este usuário");
+            }
+        }
         BeanUtils.copyProperties(addressSaved, addressUpdated);
         addressUpdated.setId(addressSaved.get().getId());
         addressUpdated.setCustomer(addressSaved.get().getCustomer());
