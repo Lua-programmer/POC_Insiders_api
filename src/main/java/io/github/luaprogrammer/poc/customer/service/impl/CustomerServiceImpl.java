@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new RuntimeException("id de customer not found");
         }
 
         CorporateCustomer customer = corporateCustomerSaved.get();
@@ -71,6 +72,15 @@ public class CustomerServiceImpl implements CustomerService {
 
         addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
 
+        if (customer.getAddresses().size() <= 4) {
+            for (int i = 0; i < customer.getAddresses().size(); i++) {
+                if (customer.getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
+                    throw new RuntimeException("Já existe um endereço principal para este usuário");
+                }
+            }
+        } else {
+            throw new RuntimeException("Este usuário já possui 5 endereços salvos");
+        }
         customer.getAddresses().add(addressSaved);
         CorporateCustomer customerUpdated = cRepository.save(customer);
         return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
@@ -102,7 +112,7 @@ public class CustomerServiceImpl implements CustomerService {
         AddressResponseDTO addressResponseDTO = addressService.updateAddress(addressIdSaved.get().getId(), addressRequest);
 
         UUID customerId = addressResponseDTO.getCustomerId();
-       return findCorporateCustomerById(customerId);
+        return findCorporateCustomerById(customerId);
     }
 
     @Override
@@ -157,6 +167,16 @@ public class CustomerServiceImpl implements CustomerService {
         Address addressSaved = addressService.saveAddress(addressRequest);
 
         addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
+
+        if (individualCustomerSaved.get().getAddresses().size() <= 4) {
+            for (int i = 0; i < individualCustomerSaved.get().getAddresses().size(); i++) {
+                if (individualCustomerSaved.get().getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
+                    throw new RuntimeException("Já existe um endereço principal para este usuário");
+                }
+            }
+        } else {
+            throw new RuntimeException("Este usuário já possui 5 endereços salvos");
+        }
 
         individualCustomerSaved.get().getAddresses().add(addressSaved);
         IndividualCustomer customerUpdated = iRepository.save(individualCustomerSaved.get());
