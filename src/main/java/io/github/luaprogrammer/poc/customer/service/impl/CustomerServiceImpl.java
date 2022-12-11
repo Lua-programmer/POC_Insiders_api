@@ -17,18 +17,14 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerR
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

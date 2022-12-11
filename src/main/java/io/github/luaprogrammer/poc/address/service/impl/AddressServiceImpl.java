@@ -58,7 +58,9 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Address addressUpdated = validateCep(requestAddress);
-
+        if (Boolean.TRUE.equals(requestAddress.getIsPrincipal())) {
+            throw new RuntimeException("Já existe um endereço principal para este usuário");
+        }
         BeanUtils.copyProperties(addressSaved, addressUpdated);
         addressUpdated.setId(addressSaved.get().getId());
         addressUpdated.setCustomer(addressSaved.get().getCustomer());
