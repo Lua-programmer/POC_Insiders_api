@@ -1,18 +1,14 @@
 package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
-import io.github.luaprogrammer.poc.address.entity.Address;
-import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
-import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,16 +29,8 @@ public class IndividualCustomerRequestDTO extends CustomerRequestDTO {
     }
 
     public static IndividualCustomer convertForEntity(IndividualCustomerResponseDTO customer) {
-
-        List<Address> addresses = new ArrayList();
-        for (int i = 0; i < customer.getAddresses().size(); i++) {
-            Address address = AddressResponseDTO.convertForEntity(customer.getAddresses().get(i));
-            addresses.add(address);
-        }
-
-        return new IndividualCustomer(customer.getId(), customer.getName(), customer.getType(), customer.getEmail(),
-                customer.getPhone(), LocalDateTime.now(), addresses,
-                customer.getCpf());
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(customer, IndividualCustomer.class);
     }
 
     @Override

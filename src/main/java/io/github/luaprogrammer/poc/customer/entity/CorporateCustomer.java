@@ -32,11 +32,6 @@ public class CorporateCustomer extends Customer {
         this.cnpj = cnpj;
     }
 
-    public CorporateCustomer(UUID id, String name, String type, String email, Long phone, LocalDateTime createdAt, List<Address> addresses, String cnpj) {
-        super(id, name, type, email, phone, createdAt, addresses);
-        this.cnpj = cnpj;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -35,9 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CorporateCustomerRepository cRepository;
     private final IndividualCustomerRepository iRepository;
-
     private final AddressRepository aRepository;
-
     private final AddressServiceImpl addressService;
 
     @Override
@@ -78,27 +76,6 @@ public class CustomerServiceImpl implements CustomerService {
         return CorporateCustomerResponseDTO.convertForDto(customerUpdated);
     }
 
-
-//    @Override
-//    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-//        IndividualCustomerResponseDTO customerUpdated = saveAddressForIndividualCustomer(id, addressRequest);
-//        IndividualCustomer individualCustomer = IndividualCustomerRequestDTO.convertForEntity(customerUpdated);
-//        IndividualCustomer save = iRepository.save(individualCustomer);
-//        return IndividualCustomerResponseDTO.convertForDto(save);
-//    }
-
-
-//    private IndividualCustomerResponseDTO saveAddressForIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
-//        Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
-//        if (individualCustomerSaved.isEmpty()) {
-//            throw new RuntimeException("id not found");
-//        }
-//        IndividualCustomerResponseDTO customer = IndividualCustomerResponseDTO.convertForDto(individualCustomerSaved.get());
-//        Address addressSaved = addressService.saveAddress(addressRequest);
-//        customer.getAddresses().add(addressSaved);
-//        return customer;
-//    }
-
     @Override
     public CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer) {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
@@ -113,6 +90,7 @@ public class CustomerServiceImpl implements CustomerService {
         return CorporateCustomerResponseDTO.convertForDto(newCorporateCustomer);
     }
 
+    @Override
     public CorporateCustomerResponseDTO updateAddressCorporateCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
@@ -137,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteAddressCorporateCustomer(UUID id) {
+    public void deleteAddressCustomer(UUID id) {
         Optional<Address> addressSaved = aRepository.findById(id);
         if (addressSaved.isEmpty()) {
             throw new RuntimeException("id not found");
@@ -169,6 +147,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+        Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
+        if (individualCustomerSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        addressRequest.setCustomerId(individualCustomerSaved.get().getId());
+        Address addressSaved = addressService.saveAddress(addressRequest);
+
+        addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
+
+        individualCustomerSaved.get().getAddresses().add(addressSaved);
+        IndividualCustomer customerUpdated = iRepository.save(individualCustomerSaved.get());
+        return IndividualCustomerResponseDTO.convertForDto(customerUpdated);
+    }
+
+    @Override
     public CustomerResponseDTO updateIndividualCustomer(UUID id, IndividualCustomerRequestDTO customer) {
         Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
         if (individualCustomerSaved.isEmpty()) {
@@ -180,6 +175,21 @@ public class CustomerServiceImpl implements CustomerService {
         IndividualCustomer individualCustomerupdate = customer.convertForEntity(id);
         IndividualCustomer newIndividualCustomer = iRepository.save(individualCustomerupdate);
         return IndividualCustomerResponseDTO.convertForDto(newIndividualCustomer);
+    }
+
+    @Override
+    public IndividualCustomerResponseDTO updateAddressIndividualCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
+        Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
+        if (individualCustomerSaved.isEmpty()) {
+            throw new RuntimeException("id not found");
+        }
+
+        Optional<Address> addressIdSaved = aRepository.findById(addressId);
+
+        AddressResponseDTO addressResponseDTO = addressService.updateAddress(addressIdSaved.get().getId(), addressRequest);
+
+        UUID customerId = addressResponseDTO.getCustomerId();
+        return findIndividualCustomerById(customerId);
     }
 
     @Override
