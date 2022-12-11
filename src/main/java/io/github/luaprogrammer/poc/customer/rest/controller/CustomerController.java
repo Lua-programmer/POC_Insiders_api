@@ -49,11 +49,11 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(customerService.updateCorporateCustomer(id, requestCustomer));
     }
-
     @PatchMapping("/corporations/{id}/add-address")
     public ResponseEntity<CorporateCustomerResponseDTO> addAddressCorporateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressCorporateCustomer(id, addressRequest));
     }
+
 
     @PatchMapping("/corporations/{id}/update-address/{addressId}")
     public ResponseEntity<CorporateCustomerResponseDTO> updateAddressCorporateCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
@@ -66,10 +66,10 @@ public class CustomerController {
         customerService.deleteCorporateCustomer(id);
     }
 
-    @DeleteMapping("corporations/{id}/delete-address")
+    @DeleteMapping("corporations/delete-address/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAddressCorporateCustomer(@PathVariable UUID id) {
-        customerService.deleteAddressCorporateCustomer(id);
+        customerService.deleteAddressCustomer(id);
     }
 
     @PostMapping("/individual")
@@ -87,20 +87,32 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findIndividualCustomerById(id));
     }
 
-//    @PatchMapping("/individual/{id}/add-address")
-//    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressIndividualCustomer(id, addressRequest));
-//    }
-
     @PutMapping("/individual/{id}")
     public ResponseEntity<CustomerResponseDTO> updateIndividualCustomer(@PathVariable UUID id, @RequestBody @Valid IndividualCustomerRequestDTO requestCustomer) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(customerService.updateIndividualCustomer(id, requestCustomer));
     }
 
+    @PatchMapping("/individual/{id}/add-address")
+    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressIndividualCustomer(id, addressRequest));
+    }
+
+
+    @PatchMapping("/individual/{id}/update-address/{addressId}")
+    public ResponseEntity<IndividualCustomerResponseDTO> updateAddressIndividualCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.updateAddressIndividualCustomer(id, addressId, addressRequest));
+    }
+
     @DeleteMapping("individual/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIndividualCustomer(@PathVariable UUID id) {
         customerService.deleteIndividualCustomer(id);
+    }
+
+    @DeleteMapping("individual/delete-address/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddressIndividualCustomer(@PathVariable UUID id) {
+        customerService.deleteAddressCustomer(id);
     }
 }

@@ -31,11 +31,6 @@ public class IndividualCustomer extends Customer {
         this.cpf = cpf;
     }
 
-    public IndividualCustomer(UUID id, String name, String type, String email, Long phone, LocalDateTime createdAt, List<Address> addresses, String cpf) {
-        super(id, name, type, email, phone, createdAt, addresses);
-        this.cpf = cpf;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
