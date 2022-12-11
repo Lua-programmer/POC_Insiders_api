@@ -77,6 +77,9 @@ public class CustomerServiceImpl implements CustomerService {
                 if (customer.getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     throw new RuntimeException("Já existe um endereço principal para este usuário");
                 }
+                if (customer.getAddresses().get(i).getLogradouro().equals( addressSaved.getLogradouro())) {
+                    throw new RuntimeException("Esse cep já está cadastrado para este usuário");
+                }
             }
         } else {
             throw new RuntimeException("Este usuário já possui 5 endereços salvos");
@@ -172,6 +175,9 @@ public class CustomerServiceImpl implements CustomerService {
             for (int i = 0; i < individualCustomerSaved.get().getAddresses().size(); i++) {
                 if (individualCustomerSaved.get().getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     throw new RuntimeException("Já existe um endereço principal para este usuário");
+                }
+                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals( addressSaved.getLogradouro())) {
+                    throw new RuntimeException("Esse cep já está cadastrado para este usuário");
                 }
             }
         } else {
