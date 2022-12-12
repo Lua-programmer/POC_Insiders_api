@@ -7,8 +7,10 @@ import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.AddressService;
 import io.github.luaprogrammer.poc.customer.entity.Customer;
+import io.github.luaprogrammer.poc.exception.RuleBusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponseDTO findAddressById(UUID id) {
         Optional<Address> address = aRepository.findById(id);
         if (address.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new EmptyResultDataAccessException("id not found", 404);
         }
 
         return AddressResponseDTO.convertForDto(address.get());
@@ -54,17 +56,17 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponseDTO updateAddress(UUID id, AddressRequestDTO requestAddress) throws Exception {
         Optional<Address> addressSaved = aRepository.findById(id);
         if (addressSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new EmptyResultDataAccessException("id not found", 404);
         }
 
         Address addressUpdated = validateCep(requestAddress);
         if (Boolean.TRUE.equals(requestAddress.getIsPrincipal())) {
-            throw new RuntimeException("Já existe um endereço principal para este usuário");
+            throw new RuleBusinessException("A primary address already exists for this customer.");
         }
         for (int i = 0; i < addressSaved.get().getCustomer().getAddresses().size(); i++) {
             if (addressSaved.get().getCustomer().getAddresses().get(i).getLogradouro().equals(requestAddress.getLogradouro())
             && !addressSaved.get().getCustomer().getAddresses().get(i).getId().equals(id)) {
-                throw new RuntimeException("Esse cep já está cadastrado para este usuário");
+                throw new RuleBusinessException("This zip code is already registered for this customer.");
             }
         }
         BeanUtils.copyProperties(addressSaved, addressUpdated);
@@ -78,14 +80,14 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void deleteAddress(UUID id) {
-        Optional<Address> address = aRepository.findById(id);
-        if (address.isEmpty()) {
-            throw new RuntimeException("id not found");
+        Address address = aRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("id not found", 404)
+        );
+
+        if (address.getCustomer() != null) {
+            throw new RuleBusinessException("Address cannot be deleted because there is a Customer linked to it.");
         }
-        if (address.get().getCustomer() != null) {
-            throw new RuntimeException("Endereço não pode ser excluído pois existe um Customer atrelado a ele.");
-        }
-        aRepository.deleteById(address.get().getId());
+        aRepository.deleteById(address.getId());
     }
 
     private Address validateCep(AddressRequestDTO requestAddress) throws Exception {

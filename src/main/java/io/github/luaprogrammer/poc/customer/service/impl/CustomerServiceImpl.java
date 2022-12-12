@@ -17,8 +17,11 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerR
 import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
+import io.github.luaprogrammer.poc.exception.RuleBusinessException;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.digester.Rule;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,11 +45,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CorporateCustomerResponseDTO findCorporateCustomerById(UUID id) {
-        Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
-        if (corporateCustomer.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        return CorporateCustomerResponseDTO.convertForDto(corporateCustomer.get());
+        CorporateCustomer corporateCustomer = cRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " not found", 404));
+        return CorporateCustomerResponseDTO.convertForDto(corporateCustomer);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id de customer not found");
+            throw new EmptyResultDataAccessException("Id " + id + "not found", 404);
         }
 
         CorporateCustomer customer = corporateCustomerSaved.get();
@@ -73,12 +74,12 @@ public class CustomerServiceImpl implements CustomerService {
                 if (customer.getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     customer.getAddresses().get(i).setIsPrincipal(false);
                 }
-                if (customer.getAddresses().get(i).getLogradouro().equals( addressSaved.getLogradouro())) {
-                    throw new RuntimeException("Esse cep já está cadastrado para este usuário");
+                if (customer.getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())) {
+                    throw new RuleBusinessException("This zip code is already registered for this customer.");
                 }
             }
         } else {
-            throw new RuntimeException("Este usuário já possui 5 endereços salvos");
+            throw new RuleBusinessException("This customer already has 5 addresses saved");
         }
         customer.getAddresses().add(addressSaved);
         CorporateCustomer customerUpdated = cRepository.save(customer);
@@ -87,12 +88,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO updateCorporateCustomer(UUID id, CorporateCustomerRequestDTO customer) {
-        Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
-        if (corporateCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
-        } else {
-            BeanUtils.copyProperties(customer, corporateCustomerSaved);
-        }
+        CorporateCustomer corporateCustomerSaved = cRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " customer not found", 404)
+        );
+
+        BeanUtils.copyProperties(customer, corporateCustomerSaved);
 
         CorporateCustomer corporateCustomerupdate = customer.convertForEntity(id);
         CorporateCustomer newCorporateCustomer = cRepository.save(corporateCustomerupdate);
@@ -103,10 +103,13 @@ public class CustomerServiceImpl implements CustomerService {
     public CorporateCustomerResponseDTO updateAddressCorporateCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new EmptyResultDataAccessException("Id " + id + "customer not found", 404);
         }
 
         Optional<Address> addressIdSaved = aRepository.findById(addressId);
+        if (addressIdSaved.isEmpty()) {
+            throw new EmptyResultDataAccessException("Id " + id + " address not found", 404);
+        }
 
         AddressResponseDTO addressResponseDTO = addressService.updateAddress(addressIdSaved.get().getId(), addressRequest);
 
@@ -116,18 +119,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCorporateCustomer(UUID id) {
-        Optional<CorporateCustomer> corporateCustomer = cRepository.findById(id);
-        if (corporateCustomer.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        cRepository.deleteById(corporateCustomer.get().getId());
+        CorporateCustomer corporateCustomer = cRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " not found", 404)
+        );
+        cRepository.deleteById(corporateCustomer.getId());
     }
 
     @Override
-    public void deleteAddressCustomer(UUID id) {
-        Optional<Address> addressSaved = aRepository.findById(id);
+    public void deleteAddressCorporateCustomer(UUID customerId, UUID addressId) {
+        Optional<CorporateCustomer> corporateCustomerById = cRepository.findById(customerId);
+        Optional<Address> addressSaved = aRepository.findById(addressId);
         if (addressSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new EmptyResultDataAccessException("Id " + addressId + " address not found", 404);
+        }
+
+        if (corporateCustomerById.isEmpty()) {
+            throw new EmptyResultDataAccessException("Id " + customerId + " customer not found", 404);
         }
 
         addressSaved.get().setCustomer(null);
@@ -159,7 +166,7 @@ public class CustomerServiceImpl implements CustomerService {
     public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
         Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
         if (individualCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new EmptyResultDataAccessException("Id " + id + "not found", 404);
         }
 
         addressRequest.setCustomerId(individualCustomerSaved.get().getId());
@@ -172,12 +179,12 @@ public class CustomerServiceImpl implements CustomerService {
                 if (individualCustomerSaved.get().getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     individualCustomerSaved.get().getAddresses().get(i).setIsPrincipal(false);
                 }
-                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals( addressSaved.getLogradouro())) {
-                    throw new RuntimeException("Esse cep já está cadastrado para este usuário");
+                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())) {
+                    throw new RuleBusinessException("This zip code is already registered for this customer.");
                 }
             }
         } else {
-            throw new RuntimeException("Este usuário já possui 5 endereços salvos");
+            throw new EmptyResultDataAccessException("Id " + id + " address not found", 404);
         }
 
         individualCustomerSaved.get().getAddresses().add(addressSaved);
@@ -187,12 +194,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponseDTO updateIndividualCustomer(UUID id, IndividualCustomerRequestDTO customer) {
-        Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
-        if (individualCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
-        } else {
-            BeanUtils.copyProperties(customer, individualCustomerSaved);
-        }
+        IndividualCustomer individualCustomerSaved = iRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " customer not found", 404)
+        );
+
+        BeanUtils.copyProperties(customer, individualCustomerSaved);
 
         IndividualCustomer individualCustomerupdate = customer.convertForEntity(id);
         IndividualCustomer newIndividualCustomer = iRepository.save(individualCustomerupdate);
@@ -203,10 +209,14 @@ public class CustomerServiceImpl implements CustomerService {
     public IndividualCustomerResponseDTO updateAddressIndividualCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
         Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
         if (individualCustomerSaved.isEmpty()) {
-            throw new RuntimeException("id not found");
+            throw new EmptyResultDataAccessException("Id " + id + "customer not found", 404);
         }
 
         Optional<Address> addressIdSaved = aRepository.findById(addressId);
+
+        if (addressIdSaved.isEmpty()) {
+            throw new EmptyResultDataAccessException("Id " + id + " address not found", 404);
+        }
 
         AddressResponseDTO addressResponseDTO = addressService.updateAddress(addressIdSaved.get().getId(), addressRequest);
 
@@ -221,5 +231,22 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException("id not found");
         }
         iRepository.deleteById(individualCustomer.get().getId());
+    }
+
+    @Override
+    public void deleteAddressIndividualCustomer(UUID customerId, UUID addressId) {
+        Optional<IndividualCustomer> individualCustomerById = iRepository.findById(customerId);
+        Optional<Address> addressSaved = aRepository.findById(addressId);
+        if (addressSaved.isEmpty()) {
+            throw new EmptyResultDataAccessException("Id " + addressId + " address not found", 404);
+        }
+
+        if (individualCustomerById.isEmpty()) {
+            throw new EmptyResultDataAccessException("Id " + customerId + " customer not found", 404);
+        }
+
+        addressSaved.get().setCustomer(null);
+        aRepository.save(addressSaved.get());
+        addressService.deleteAddress(addressSaved.get().getId());
     }
 }

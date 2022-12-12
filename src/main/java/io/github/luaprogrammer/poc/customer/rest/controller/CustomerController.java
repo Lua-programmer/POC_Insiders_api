@@ -66,10 +66,10 @@ public class CustomerController {
         customerService.deleteCorporateCustomer(id);
     }
 
-    @DeleteMapping("corporations/delete-address/{id}")
+    @DeleteMapping("corporations/{id}/delete-address/{addressId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAddressCorporateCustomer(@PathVariable UUID id) {
-        customerService.deleteAddressCustomer(id);
+    public void deleteAddressCorporateCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId) {
+        customerService.deleteAddressCorporateCustomer(id, addressId);
     }
 
     @PostMapping("/individual")
@@ -110,9 +110,9 @@ public class CustomerController {
         customerService.deleteIndividualCustomer(id);
     }
 
-    @DeleteMapping("individual/delete-address/{id}")
+    @DeleteMapping("individual/{id}/delete-address/{addressId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAddressIndividualCustomer(@PathVariable UUID id) {
-        customerService.deleteAddressCustomer(id);
+    public void deleteAddressIndividualCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId ) {
+        customerService.deleteAddressIndividualCustomer(id, addressId);
     }
 }

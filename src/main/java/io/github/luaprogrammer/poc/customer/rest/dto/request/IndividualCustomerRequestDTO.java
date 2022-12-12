@@ -16,8 +16,8 @@ import java.util.UUID;
 @Setter
 public class IndividualCustomerRequestDTO extends CustomerRequestDTO {
 
-    @NotBlank(message = "cpf is required")
-    @CPF(message = "cpf invalid")
+    @NotBlank(message = "CPF")
+    @CPF(message = "CPF invalid")
     private String cpf;
 
     public IndividualCustomer convertForEntity() {

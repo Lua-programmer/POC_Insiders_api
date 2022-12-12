@@ -26,7 +26,7 @@ public interface CustomerService {
 
     void deleteCorporateCustomer(UUID id);
 
-    void deleteAddressCustomer(UUID id);
+    void deleteAddressCorporateCustomer(UUID customerId, UUID addressId);
 
     Page<CustomerResponseDTO> findAllIndividualCustomer(Pageable pageable);
 
@@ -41,4 +41,6 @@ public interface CustomerService {
     IndividualCustomerResponseDTO updateAddressIndividualCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception;
 
     void deleteIndividualCustomer(UUID id);
+
+    void deleteAddressIndividualCustomer(UUID customerId, UUID addressId);
 }

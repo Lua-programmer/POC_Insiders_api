@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 
 @Data
@@ -14,14 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class CustomerRequestDTO {
 
-    @NotBlank(message = "name is required")
+    @NotBlank(message = "NAME")
+    @Length(min = 10, max = 50)
     private String name;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "EMAIL")
+    @Email(message = "EMAIL invalid")
     private String email;
 
-    @NotNull(message = "phone is required")
+    @NotNull(message = "PHONE")
     private Long phone;
 
     private AddressRequestDTO address;
