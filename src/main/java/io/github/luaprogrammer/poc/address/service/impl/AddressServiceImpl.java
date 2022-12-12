@@ -61,6 +61,7 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Address addressUpdated = validateCep(requestAddress);
+        addressUpdated.setId(addressSaved.get().getId());
         if (Boolean.TRUE.equals(requestAddress.getIsPrincipal())) {
             throw new RuleBusinessException("A primary address already exists for this customer.");
         }
