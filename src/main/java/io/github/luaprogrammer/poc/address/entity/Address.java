@@ -2,12 +2,11 @@ package io.github.luaprogrammer.poc.address.entity;
 
 
 import io.github.luaprogrammer.poc.customer.entity.Customer;
-import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -26,8 +25,8 @@ public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "hibernate-uuid")
+    @Type(type="org.hibernate.type.UUIDCharType")
     @Column(name = "id")
     private UUID id;
 
