@@ -70,6 +70,9 @@ public class CustomerServiceImpl implements CustomerService {
         addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
 
         if (customer.getAddresses().size() <= 4) {
+            if (customer.getAddresses().isEmpty()) {
+                addressSaved.setIsPrincipal(true);
+            }
             for (int i = 0; i < customer.getAddresses().size(); i++) {
                 if (customer.getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     customer.getAddresses().get(i).setIsPrincipal(false);
@@ -175,6 +178,9 @@ public class CustomerServiceImpl implements CustomerService {
         addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
 
         if (individualCustomerSaved.get().getAddresses().size() <= 4) {
+            if (individualCustomerSaved.get().getAddresses().isEmpty()) {
+                addressSaved.setIsPrincipal(true);
+            }
             for (int i = 0; i < individualCustomerSaved.get().getAddresses().size(); i++) {
                 if (individualCustomerSaved.get().getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     individualCustomerSaved.get().getAddresses().get(i).setIsPrincipal(false);
