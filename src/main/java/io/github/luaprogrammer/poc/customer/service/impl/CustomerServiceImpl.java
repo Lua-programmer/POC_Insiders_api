@@ -76,7 +76,8 @@ public class CustomerServiceImpl implements CustomerService {
                 if (customer.getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     customer.getAddresses().get(i).setIsPrincipal(false);
                 }
-                if (customer.getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())) {
+                if (customer.getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())
+                        && customer.getAddresses().get(i).getNumero().equals(addressSaved.getNumero())) {
                     throw new RuleBusinessException("This zip code is already registered for this customer.");
                 }
             }
@@ -188,7 +189,8 @@ public class CustomerServiceImpl implements CustomerService {
                 if (individualCustomerSaved.get().getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     individualCustomerSaved.get().getAddresses().get(i).setIsPrincipal(false);
                 }
-                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())) {
+                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())
+                && individualCustomerSaved.get().getAddresses().get(i).getNumero().equals(addressSaved.getNumero())) {
                     throw new RuleBusinessException("This zip code is already registered for this customer.");
                 }
             }
