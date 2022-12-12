@@ -16,8 +16,8 @@ import java.util.UUID;
 @Setter
 public class CorporateCustomerRequestDTO extends CustomerRequestDTO {
 
-    @NotBlank(message = "cnpj is required")
-    @CNPJ(message = "cnpj invalid")
+    @NotBlank(message = "CNPJ ")
+    @CNPJ(message = "CNPJ invalid")
     private String cnpj;
 
     public CorporateCustomer convertForEntity() {
