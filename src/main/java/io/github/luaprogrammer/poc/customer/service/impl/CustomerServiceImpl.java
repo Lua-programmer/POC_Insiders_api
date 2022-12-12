@@ -19,7 +19,6 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomer
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
 import io.github.luaprogrammer.poc.exception.RuleBusinessException;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.digester.Rule;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -140,6 +139,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new EmptyResultDataAccessException("Id " + customerId + " customer not found", 404);
         }
 
+        if (Boolean.TRUE.equals(addressSaved.get().getIsPrincipal())) {
+            throw new RuleBusinessException("Main address cannot be deleted.");
+        }
+
         addressSaved.get().setCustomer(null);
         aRepository.save(addressSaved.get());
         addressService.deleteAddress(addressSaved.get().getId());
@@ -152,11 +155,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public IndividualCustomerResponseDTO findIndividualCustomerById(UUID id) {
-        Optional<IndividualCustomer> individualCustomer = iRepository.findById(id);
-        if (individualCustomer.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        return IndividualCustomerResponseDTO.convertForDto(individualCustomer.get());
+        IndividualCustomer individualCustomer = iRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " not found", 404)
+        );
+
+        return IndividualCustomerResponseDTO.convertForDto(individualCustomer);
     }
 
     @Override
@@ -249,6 +252,10 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (individualCustomerById.isEmpty()) {
             throw new EmptyResultDataAccessException("Id " + customerId + " customer not found", 404);
+        }
+
+        if (Boolean.TRUE.equals(addressSaved.get().getIsPrincipal())) {
+            throw new RuleBusinessException("Main address cannot be deleted.");
         }
 
         addressSaved.get().setCustomer(null);
