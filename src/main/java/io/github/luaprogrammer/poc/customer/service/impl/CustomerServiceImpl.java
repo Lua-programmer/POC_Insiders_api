@@ -235,11 +235,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteIndividualCustomer(UUID id) {
-        Optional<IndividualCustomer> individualCustomer = iRepository.findById(id);
-        if (individualCustomer.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        iRepository.deleteById(individualCustomer.get().getId());
+        IndividualCustomer individualCustomer = iRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " not found", 404)
+        );
+
+        iRepository.deleteById(individualCustomer.getId());
     }
 
     @Override
