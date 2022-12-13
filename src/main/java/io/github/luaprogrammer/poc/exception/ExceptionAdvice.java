@@ -26,6 +26,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     private static final String CONSTANT_VALIDATION_EMAIL = "Email";
     private static final String CONSTANT_VALIDATION_CNPJ = "CNPJ";
     private static final String CONSTANT_VALIDATION_CPF = "CPF";
+    private static final String CONSTANT_VALIDATION_PATTERN = "Pattern";
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -90,6 +91,9 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         }
         if (fieldErrors.getCode().equals(CONSTANT_VALIDATION_CPF)) {
             return fieldErrors.getDefaultMessage();
+        }
+        if (fieldErrors.getCode().equals(CONSTANT_VALIDATION_PATTERN)) {
+            return fieldErrors.getDefaultMessage().concat(" format invalid");
         }
         return fieldErrors.toString();
     }

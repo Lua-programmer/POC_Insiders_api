@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class IndividualCustomerRequestDTO extends CustomerRequestDTO {
 
     @NotBlank(message = "CPF")
     @CPF(message = "CPF invalid")
+    @Pattern(regexp="(^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$)",message = "CPF")
     private String cpf;
 
     public IndividualCustomer convertForEntity() {

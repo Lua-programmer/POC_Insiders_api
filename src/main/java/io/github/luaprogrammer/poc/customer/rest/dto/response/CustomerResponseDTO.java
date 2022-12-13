@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data

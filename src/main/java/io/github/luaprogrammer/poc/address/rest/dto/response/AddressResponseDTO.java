@@ -4,10 +4,12 @@ import io.github.luaprogrammer.poc.address.entity.Address;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
 public class AddressResponseDTO {
+
     private UUID id;
 
     private String cep;

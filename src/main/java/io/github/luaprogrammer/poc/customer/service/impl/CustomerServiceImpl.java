@@ -21,12 +21,16 @@ import io.github.luaprogrammer.poc.exception.RuleBusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +44,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Page<CustomerResponseDTO> findAllCorporateCustomer(Pageable pageable) {
         return cRepository.findAll(pageable).map(CustomerResponseDTO::convertForDto);
+    }
+
+    public List<CustomerResponseDTO> findAllFilterCorporateCustomer(String name) {
+        return cRepository.findAllByNameLikeIgnoreCase(name).stream().map(CustomerResponseDTO::convertForDto).collect(Collectors.toList());
     }
 
     @Override
