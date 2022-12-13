@@ -1,13 +1,12 @@
 package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
 import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
-import io.github.luaprogrammer.poc.customer.rest.dto.response.CorporateCustomerResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CNPJ;
-import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,6 +17,7 @@ public class CorporateCustomerRequestDTO extends CustomerRequestDTO {
 
     @NotBlank(message = "CNPJ ")
     @CNPJ(message = "CNPJ invalid")
+    @Pattern(regexp="(^\\d{2}\\.\\d{3}\\.\\d{3}\\/\\d{4}\\-\\d{2}$)",message = "CNPJ")
     private String cnpj;
 
     public CorporateCustomer convertForEntity() {
@@ -27,22 +27,6 @@ public class CorporateCustomerRequestDTO extends CustomerRequestDTO {
     public CorporateCustomer convertForEntity(UUID id) {
         return new CorporateCustomer(id, getName(), getEmail(), getPhone(), LocalDateTime.now(), cnpj);
     }
-
-    public static CorporateCustomer convertForEntity(CorporateCustomerResponseDTO customer) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(customer, CorporateCustomer.class);
-//
-//        List<Address> addresses = new ArrayList();
-//        for (int i = 0; i < customer.getAddresses().size(); i++) {
-//            Address address = AddressResponseDTO.convertForEntity(customer.getAddresses().get(i));
-//            addresses.add(address);
-//        }
-//
-//        return new CorporateCustomer(customer.getId(), customer.getName(), customer.getType(), customer.getEmail(),
-//                customer.getPhone(), LocalDateTime.now(), addresses,
-//                customer.getCnpj());
-    }
-
 
     @Override
     public boolean equals(Object o) {

@@ -8,22 +8,21 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDT
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.impl.CustomerServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
-
     private final CustomerServiceImpl customerService;
 
     @PostMapping("/corporations")
@@ -37,6 +36,12 @@ public class CustomerController {
                 .body(customerService.findAllCorporateCustomer(pageable));
     }
 
+    @GetMapping("/corporations/filter/{name}")
+    public ResponseEntity<List<CustomerResponseDTO>> readAllFilterCorporateCustomers(@Param("name") String name) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(customerService.findAllFilterCorporateCustomer(name));
+    }
+
     @GetMapping("/corporations/{id}")
     public ResponseEntity<CorporateCustomerResponseDTO> readCorporateCustomerById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findCorporateCustomerById(id));
@@ -48,6 +53,7 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(customerService.updateCorporateCustomer(id, requestCustomer));
     }
+
     @PatchMapping("/corporations/{id}/add-address")
     public ResponseEntity<CorporateCustomerResponseDTO> addAddressCorporateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressCorporateCustomer(id, addressRequest));
@@ -111,7 +117,7 @@ public class CustomerController {
 
     @DeleteMapping("individual/{id}/delete-address/{addressId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAddressIndividualCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId ) {
+    public void deleteAddressIndividualCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId) {
         customerService.deleteAddressIndividualCustomer(id, addressId);
     }
 }

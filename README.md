@@ -31,6 +31,10 @@
 	<td>Flyway</td>
 	<td>9.3.1</td>
 </tr>
+<tr>
+	<td>Postman</td>
+	<td>v9</td>
+</tr>
 </table>
 
 <h3>Tecnologias Utilizadas</h3>
@@ -90,7 +94,8 @@
 <br>3° - Abra o terminal no diretório *docker* e rode o comando *docker-compose up -d*
 <br>
 <br>4° - No diretório *resources* dentro do arquivo *application-dev.yml* troque as variáveis para os mesmos dados que foi adicionado no seu arquivo *.env* mencionado acima.
-
+<br>
+<br>5º - Para testar a API no postman, faça o "import" do arquivo tal no seu Postman.
 <br>
 <br>
 <br>
