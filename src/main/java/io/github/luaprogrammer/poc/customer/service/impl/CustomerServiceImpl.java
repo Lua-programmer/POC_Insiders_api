@@ -19,7 +19,6 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomer
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
 import io.github.luaprogrammer.poc.exception.RuleBusinessException;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.digester.Rule;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -70,11 +69,15 @@ public class CustomerServiceImpl implements CustomerService {
         addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
 
         if (customer.getAddresses().size() <= 4) {
+            if (customer.getAddresses().isEmpty()) {
+                addressSaved.setIsPrincipal(true);
+            }
             for (int i = 0; i < customer.getAddresses().size(); i++) {
                 if (customer.getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     customer.getAddresses().get(i).setIsPrincipal(false);
                 }
-                if (customer.getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())) {
+                if (customer.getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())
+                        && customer.getAddresses().get(i).getNumero().equals(addressSaved.getNumero())) {
                     throw new RuleBusinessException("This zip code is already registered for this customer.");
                 }
             }
@@ -137,6 +140,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new EmptyResultDataAccessException("Id " + customerId + " customer not found", 404);
         }
 
+        if (Boolean.TRUE.equals(addressSaved.get().getIsPrincipal())) {
+            throw new RuleBusinessException("Main address cannot be deleted.");
+        }
+
         addressSaved.get().setCustomer(null);
         aRepository.save(addressSaved.get());
         addressService.deleteAddress(addressSaved.get().getId());
@@ -149,11 +156,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public IndividualCustomerResponseDTO findIndividualCustomerById(UUID id) {
-        Optional<IndividualCustomer> individualCustomer = iRepository.findById(id);
-        if (individualCustomer.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        return IndividualCustomerResponseDTO.convertForDto(individualCustomer.get());
+        IndividualCustomer individualCustomer = iRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " not found", 404)
+        );
+
+        return IndividualCustomerResponseDTO.convertForDto(individualCustomer);
     }
 
     @Override
@@ -175,11 +182,15 @@ public class CustomerServiceImpl implements CustomerService {
         addressSaved.setCustomer(Customer.builder().id(addressRequest.getCustomerId()).build());
 
         if (individualCustomerSaved.get().getAddresses().size() <= 4) {
+            if (individualCustomerSaved.get().getAddresses().isEmpty()) {
+                addressSaved.setIsPrincipal(true);
+            }
             for (int i = 0; i < individualCustomerSaved.get().getAddresses().size(); i++) {
                 if (individualCustomerSaved.get().getAddresses().get(i).getIsPrincipal() && addressSaved.getIsPrincipal()) {
                     individualCustomerSaved.get().getAddresses().get(i).setIsPrincipal(false);
                 }
-                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())) {
+                if (individualCustomerSaved.get().getAddresses().get(i).getLogradouro().equals(addressSaved.getLogradouro())
+                && individualCustomerSaved.get().getAddresses().get(i).getNumero().equals(addressSaved.getNumero())) {
                     throw new RuleBusinessException("This zip code is already registered for this customer.");
                 }
             }
@@ -226,11 +237,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteIndividualCustomer(UUID id) {
-        Optional<IndividualCustomer> individualCustomer = iRepository.findById(id);
-        if (individualCustomer.isEmpty()) {
-            throw new RuntimeException("id not found");
-        }
-        iRepository.deleteById(individualCustomer.get().getId());
+        IndividualCustomer individualCustomer = iRepository.findById(id).orElseThrow(
+                () -> new EmptyResultDataAccessException("Id " + id + " not found", 404)
+        );
+
+        iRepository.deleteById(individualCustomer.getId());
     }
 
     @Override
@@ -243,6 +254,10 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (individualCustomerById.isEmpty()) {
             throw new EmptyResultDataAccessException("Id " + customerId + " customer not found", 404);
+        }
+
+        if (Boolean.TRUE.equals(addressSaved.get().getIsPrincipal())) {
+            throw new RuleBusinessException("Main address cannot be deleted.");
         }
 
         addressSaved.get().setCustomer(null);

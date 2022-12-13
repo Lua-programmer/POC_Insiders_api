@@ -1,12 +1,10 @@
 package io.github.luaprogrammer.poc.address.rest.controller;
 
 
-import com.google.gson.Gson;
 import io.github.luaprogrammer.poc.address.entity.Address;
 import io.github.luaprogrammer.poc.address.rest.dto.request.AddressRequestDTO;
 import io.github.luaprogrammer.poc.address.rest.dto.response.AddressResponseDTO;
 import io.github.luaprogrammer.poc.address.service.impl.AddressServiceImpl;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController

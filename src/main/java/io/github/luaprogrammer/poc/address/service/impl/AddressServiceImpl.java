@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,6 +61,7 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Address addressUpdated = validateCep(requestAddress);
+        addressUpdated.setId(addressSaved.get().getId());
         if (Boolean.TRUE.equals(requestAddress.getIsPrincipal())) {
             throw new RuleBusinessException("A primary address already exists for this customer.");
         }
@@ -69,6 +71,16 @@ public class AddressServiceImpl implements AddressService {
                 throw new RuleBusinessException("This zip code is already registered for this customer.");
             }
         }
+
+        for (int i = 0; i < addressSaved.get().getCustomer().getAddresses().size(); i++) {
+            if (Objects.equals(Boolean.TRUE, !addressSaved.get().getCustomer().getAddresses().get(i).getIsPrincipal())
+                    && Boolean.TRUE.equals(!addressUpdated.getIsPrincipal()) || addressSaved.get().getCustomer().getAddresses().size() == 1
+                    && Boolean.TRUE.equals(!addressUpdated.getIsPrincipal())
+            ) {
+                throw new RuleBusinessException("The customer must have at least 1 main address.");
+            }
+        }
+
         BeanUtils.copyProperties(addressSaved, addressUpdated);
         addressUpdated.setId(addressSaved.get().getId());
         addressUpdated.setCustomer(addressSaved.get().getCustomer());

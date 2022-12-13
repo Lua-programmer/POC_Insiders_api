@@ -2,12 +2,12 @@ package io.github.luaprogrammer.poc.customer.rest.dto.request;
 
 import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 import org.modelmapper.ModelMapper;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
