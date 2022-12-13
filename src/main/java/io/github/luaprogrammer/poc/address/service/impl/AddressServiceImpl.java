@@ -46,7 +46,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address saveAddress(AddressRequestDTO requestAddress) throws Exception {
+    public Address saveAddress(AddressRequestDTO requestAddress) {
 
         Address address = validateCep(requestAddress);
 
@@ -54,7 +54,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressResponseDTO updateAddress(UUID id, AddressRequestDTO requestAddress) throws Exception {
+    public AddressResponseDTO updateAddress(UUID id, AddressRequestDTO requestAddress) {
         Optional<Address> addressSaved = aRepository.findById(id);
         if (addressSaved.isEmpty()) {
             throw new EmptyResultDataAccessException("id not found", 404);
@@ -102,25 +102,29 @@ public class AddressServiceImpl implements AddressService {
         aRepository.deleteById(address.getId());
     }
 
-    private Address validateCep(AddressRequestDTO requestAddress) throws Exception {
+    private Address validateCep(AddressRequestDTO requestAddress)  {
 
-        URL url = new URL("https://viacep.com.br/ws/" + requestAddress.getCep() + "/json/");
-        URLConnection connection = url.openConnection();
-        InputStream is = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+       try {
+           URL url = new URL("https://viacep.com.br/ws/" + requestAddress.getCep() + "/json/");
+           URLConnection connection = url.openConnection();
+           InputStream is = connection.getInputStream();
+           BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
-        String cep = "";
-        StringBuilder jsonCep = new StringBuilder();
-        while ((cep = reader.readLine()) != null) {
-            jsonCep.append(cep);
-        }
+           String cep = "";
+           StringBuilder jsonCep = new StringBuilder();
+           while ((cep = reader.readLine()) != null) {
+               jsonCep.append(cep);
+           }
 
-        AddressResponseDTO addressAux = new Gson().fromJson(jsonCep.toString(), AddressResponseDTO.class);
-        requestAddress.setCep(addressAux.getCep());
-        requestAddress.setLogradouro(addressAux.getLogradouro());
-        requestAddress.setBairro(addressAux.getBairro());
-        requestAddress.setLocalidade(addressAux.getLocalidade());
-        requestAddress.setUf(addressAux.getUf());
+           AddressResponseDTO addressAux = new Gson().fromJson(jsonCep.toString(), AddressResponseDTO.class);
+           requestAddress.setCep(addressAux.getCep());
+           requestAddress.setLogradouro(addressAux.getLogradouro());
+           requestAddress.setBairro(addressAux.getBairro());
+           requestAddress.setLocalidade(addressAux.getLocalidade());
+           requestAddress.setUf(addressAux.getUf());
+       } catch (Exception e) {
+           throw new RuntimeException("CEP invalid");
+       }
 
         return requestAddress.convertForEntity();
     }

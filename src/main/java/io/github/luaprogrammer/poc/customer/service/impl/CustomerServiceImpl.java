@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+    public CorporateCustomerResponseDTO addAddressCorporateCustomer(UUID id, AddressRequestDTO addressRequest)  {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
             throw new EmptyResultDataAccessException("Id " + id + "not found", 404);
@@ -111,7 +111,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CorporateCustomerResponseDTO updateAddressCorporateCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
+    public CorporateCustomerResponseDTO updateAddressCorporateCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) {
         Optional<CorporateCustomer> corporateCustomerSaved = cRepository.findById(id);
         if (corporateCustomerSaved.isEmpty()) {
             throw new EmptyResultDataAccessException("Id " + id + "customer not found", 404);
@@ -178,7 +178,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) throws Exception {
+    public IndividualCustomerResponseDTO addAddressIndividualCustomer(UUID id, AddressRequestDTO addressRequest) {
         Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
         if (individualCustomerSaved.isEmpty()) {
             throw new EmptyResultDataAccessException("Id " + id + "not found", 404);
@@ -225,7 +225,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public IndividualCustomerResponseDTO updateAddressIndividualCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) throws Exception {
+    public IndividualCustomerResponseDTO updateAddressIndividualCustomer(UUID id, UUID addressId, AddressRequestDTO addressRequest) {
         Optional<IndividualCustomer> individualCustomerSaved = iRepository.findById(id);
         if (individualCustomerSaved.isEmpty()) {
             throw new EmptyResultDataAccessException("Id " + id + "customer not found", 404);

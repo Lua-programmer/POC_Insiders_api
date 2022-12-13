@@ -55,13 +55,13 @@ public class CustomerController {
     }
 
     @PatchMapping("/corporations/{id}/add-address")
-    public ResponseEntity<CorporateCustomerResponseDTO> addAddressCorporateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+    public ResponseEntity<CorporateCustomerResponseDTO> addAddressCorporateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressCorporateCustomer(id, addressRequest));
     }
 
 
     @PatchMapping("/corporations/{id}/update-address/{addressId}")
-    public ResponseEntity<CorporateCustomerResponseDTO> updateAddressCorporateCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+    public ResponseEntity<CorporateCustomerResponseDTO> updateAddressCorporateCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.updateAddressCorporateCustomer(id, addressId, addressRequest));
     }
 
@@ -99,13 +99,13 @@ public class CustomerController {
     }
 
     @PatchMapping("/individual/{id}/add-address")
-    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+    public ResponseEntity<IndividualCustomerResponseDTO> addAddressIndividualCustomer(@PathVariable("id") UUID id, @RequestBody @Valid AddressRequestDTO addressRequest) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.addAddressIndividualCustomer(id, addressRequest));
     }
 
 
     @PatchMapping("/individual/{id}/update-address/{addressId}")
-    public ResponseEntity<IndividualCustomerResponseDTO> updateAddressIndividualCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) throws Exception {
+    public ResponseEntity<IndividualCustomerResponseDTO> updateAddressIndividualCustomer(@PathVariable("id") UUID id, @PathVariable("addressId") UUID addressId, @RequestBody @Valid AddressRequestDTO addressRequest) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(customerService.updateAddressIndividualCustomer(id, addressId, addressRequest));
     }
 
