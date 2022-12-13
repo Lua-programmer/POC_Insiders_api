@@ -66,19 +66,6 @@ public class Address implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Address(UUID id, String cep, String logradouro, Long numero, String complemento, String bairro, String localidade, String uf, Boolean isPrincipal, LocalDateTime createdAt) {
-        this.id = id;
-        this.cep = cep;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.localidade = localidade;
-        this.uf = uf;
-        this.isPrincipal = isPrincipal;
-        this.createdAt = createdAt;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -103,6 +103,8 @@ public class CustomerServiceImpl implements CustomerService {
                 () -> new EmptyResultDataAccessException("Id " + id + " customer not found", 404)
         );
 
+        corporateCustomerSaved.setEmail(null);
+        corporateCustomerSaved.setCnpj(null);
         BeanUtils.copyProperties(customer, corporateCustomerSaved);
 
         CorporateCustomer corporateCustomerupdate = customer.convertForEntity(id);
@@ -220,6 +222,9 @@ public class CustomerServiceImpl implements CustomerService {
         IndividualCustomer individualCustomerSaved = iRepository.findById(id).orElseThrow(
                 () -> new EmptyResultDataAccessException("Id " + id + " customer not found", 404)
         );
+
+        individualCustomerSaved.setEmail(null);
+        individualCustomerSaved.setCpf(null);
 
         BeanUtils.copyProperties(customer, individualCustomerSaved);
 

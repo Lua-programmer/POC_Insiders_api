@@ -31,7 +31,7 @@ public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(generator = "hibernate-uuid")  //para mysql
-    @Type(type="org.hibernate.type.UUIDCharType")
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(name = "id")
     private UUID id;
 
