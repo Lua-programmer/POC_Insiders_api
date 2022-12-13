@@ -36,8 +36,8 @@ public class CustomerController {
                 .body(customerService.findAllCorporateCustomer(pageable));
     }
 
-    @GetMapping("/corporations/filter/{name}")
-    public ResponseEntity<List<CustomerResponseDTO>> readAllFilterCorporateCustomers(@Param("name") String name) {
+    @GetMapping("/corporations/filter/")
+    public ResponseEntity<List<CustomerResponseDTO>> readAllFilterCorporateCustomers(@RequestParam("name") String name) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(customerService.findAllFilterCorporateCustomer(name));
     }
@@ -85,6 +85,12 @@ public class CustomerController {
     @GetMapping("/individual")
     public ResponseEntity<Page<CustomerResponseDTO>> readAllIndividualCustomers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.findAllIndividualCustomer(pageable));
+    }
+
+    @GetMapping("/individual/filter/")
+    public ResponseEntity<List<CustomerResponseDTO>> readAllFilterIndividualCustomers(@RequestParam("name") String name) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(customerService.findAllFilterIndividualCustomer(name));
     }
 
     @GetMapping("/individual/{id}")

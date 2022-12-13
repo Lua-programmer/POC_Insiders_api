@@ -1,15 +1,14 @@
 package io.github.luaprogrammer.poc.customer.repository;
 
-import io.github.luaprogrammer.poc.customer.entity.CorporateCustomer;
 import io.github.luaprogrammer.poc.customer.entity.IndividualCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface IndividualCustomerRepository extends JpaRepository<IndividualCustomer, UUID> {
-    @Query("SELECT c FROM Customer c WHERE c.name LIKE '%:name%' ")
-    List<CorporateCustomer> findAllByNameLikeIgnoreCase(@Param("name") String name);
+    @Query("SELECT ic FROM IndividualCustomer ic WHERE ic.name LIKE %:name% ")
+    List<IndividualCustomer> findIndividualCustomerByNameLikeIgnoreCase(@RequestParam("name") String name);
 }

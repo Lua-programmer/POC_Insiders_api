@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public List<CustomerResponseDTO> findAllFilterCorporateCustomer(String name) {
-        return cRepository.findAllByNameLikeIgnoreCase(name).stream().map(CustomerResponseDTO::convertForDto).collect(Collectors.toList());
+        return cRepository.findCorporateCustomersByNameIsLikeIgnoreCase(name).stream().map(CustomerResponseDTO::convertForDto).collect(Collectors.toList());
     }
 
     @Override
@@ -160,6 +160,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Page<CustomerResponseDTO> findAllIndividualCustomer(Pageable pageable) {
         return iRepository.findAll(pageable).map(CustomerResponseDTO::convertForDto);
+    }
+
+    public List<CustomerResponseDTO> findAllFilterIndividualCustomer(String name) {
+        return iRepository.findIndividualCustomerByNameLikeIgnoreCase(name).stream().map(CustomerResponseDTO::convertForDto).collect(Collectors.toList());
     }
 
     @Override

@@ -1,0 +1,2 @@
+ALTER TABLE customer ADD COLUMN version INTEGER;
+ALTER TABLE address ADD COLUMN version INTEGER;
