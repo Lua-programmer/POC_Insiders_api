@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public abstract class CustomerRequestDTO {
 
     @NotBlank(message = "NAME")
-    @Length(min = 10, max = 50)
+    @Length(message = "NAME", min = 10, max = 50)
     private String name;
 
     @NotBlank(message = "EMAIL")
