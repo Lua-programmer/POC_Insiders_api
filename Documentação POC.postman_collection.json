@@ -1,0 +1,472 @@
+{
+	"info": {
+		"_postman_id": "e7e63fde-6dad-46ee-b6a8-40b8a7edd74b",
+		"name": "Documentação POC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17399592"
+	},
+	"item": [
+		{
+			"name": "CorporateCustomer",
+			"item": [
+				{
+					"name": "GET readAllCorporateCustomers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET readAllFilterCorporateCustomers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/filter/?name=oe",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"filter",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "oe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET readCorporateCustomerById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/b45fd2b9-ef63-402a-89dc-05ac34405f5e",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"b45fd2b9-ef63-402a-89dc-05ac34405f5e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST createCorporateCustomer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cnpj\": \"33.359.749/0001-89\",\r\n  \"name\": \"Zoe Potter PetShop\",\r\n  \"email\": \"zoe@outlook.com\",\r\n  \"phone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT  updateCorporateCustomer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cnpj\": \"06.971.290/0001-05\",\r\n  \"name\": \"Zoe Potter PetShop e variedades\",\r\n  \"email\": \"zoe@gmail.com\",\r\n  \"phone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/a1c200e9-7a83-4aec-a703-c3216ce87a39",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"a1c200e9-7a83-4aec-a703-c3216ce87a39"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE deleteCorporateCustomer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nomeCompleto\": \"Zoe\",\r\n  \"documentoValor\": 1234567890,\r\n  \"email\": \"zoe@gmail.com\",\r\n  \"telefone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/fe5e3652-2dd5-4086-a061-00dafbae9d9a",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"fe5e3652-2dd5-4086-a061-00dafbae9d9a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH addAddressCorporateCustomer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cep\": \"58113616\",\r\n  \"complemento\": \"Casa\",\r\n  \"numero\": 65,\r\n  \"isPrincipal\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/b45fd2b9-ef63-402a-89dc-05ac34405f5e/add-address",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"b45fd2b9-ef63-402a-89dc-05ac34405f5e",
+								"add-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH  updateAddressCorporateCustomer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cep\": \"58113616\",\r\n  \"numero\": 65,\r\n  \"complemento\": \"Casa\",\r\n  \"isPrincipal\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/a89fd9f3-da13-4ac0-bd21-3e679b65fb66/update-address/eeb9c3d9-0204-4c2e-8ddf-6ebcfe3a786b",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"a89fd9f3-da13-4ac0-bd21-3e679b65fb66",
+								"update-address",
+								"eeb9c3d9-0204-4c2e-8ddf-6ebcfe3a786b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE deleteAddressCorporateCustomer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nomeCompleto\": \"Zoe\",\r\n  \"documentoValor\": 1234567890,\r\n  \"email\": \"zoe@gmail.com\",\r\n  \"telefone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{corporate}}/44207e34-7198-41e4-925f-7b1a76d7d1b0/delete-address/319e80fd-7237-4457-97b6-1ee7f4c7d716",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{corporate}}",
+								"44207e34-7198-41e4-925f-7b1a76d7d1b0",
+								"delete-address",
+								"319e80fd-7237-4457-97b6-1ee7f4c7d716"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "IndividualCustomer",
+			"item": [
+				{
+					"name": "GET  readAllIndividualCustomers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{individual}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET readAllFilterIndividualCustomers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/filter/?name=lua",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"filter",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "lua"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET readIndividualCustomerById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/d292b564-4be6-4398-953c-3552401a4e5c",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"d292b564-4be6-4398-953c-3552401a4e5c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST createIndividualCustomer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cpf\": \"719.222.790-05\",\r\n  \"name\": \"Susie\",\r\n  \"email\": \"Susie@yahoo.com\",\r\n  \"phone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{individual}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT  updateIndividualCustomer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cpf\": \"80411081055\",\r\n  \"name\": \"Barbie\",\r\n  \"email\": \"barbie@gmail.com\",\r\n  \"phone\": 83987156620\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/2455f67d-cd96-4090-85ff-c33942a6f1f3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"2455f67d-cd96-4090-85ff-c33942a6f1f3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE deleteIndividualCustomer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nomeCompleto\": \"Zoe\",\r\n  \"documentoValor\": 1234567890,\r\n  \"email\": \"zoe@gmail.com\",\r\n  \"telefone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/d292b564-4be6-4398-953c-3552401a4e5c",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"d292b564-4be6-4398-953c-3552401a4e5c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH addAddressIndividualCustomer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cep\": \"58046915\",\r\n  \"complemento\": \"Casa\",\r\n  \"numero\": 65,\r\n  \"isPrincipal\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/d3dbe496-d7c4-4382-a147-135d520ca7a0/add-address",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"d3dbe496-d7c4-4382-a147-135d520ca7a0",
+								"add-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH updateAddressIndividualCustomer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cep\": \"58045915\",\r\n  \"complemento\": \"Casa\",\r\n  \"numero\": 65,\r\n  \"isPrincipal\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/d3dbe496-d7c4-4382-a147-135d520ca7a0/update-address/97f7e53a-4e9c-479d-8a96-9b5237db1396",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"d3dbe496-d7c4-4382-a147-135d520ca7a0",
+								"update-address",
+								"97f7e53a-4e9c-479d-8a96-9b5237db1396"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE deleteAddressIndividualCustomer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nomeCompleto\": \"Zoe\",\r\n  \"documentoValor\": 1234567890,\r\n  \"email\": \"zoe@gmail.com\",\r\n  \"telefone\": 83988048798\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{individual}}/5e3d6c41-d11d-42df-a051-a4d649c72663/delete-address/4a7f7769-ab39-4878-a7ac-7815b03d63b4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{individual}}",
+								"5e3d6c41-d11d-42df-a051-a4d649c72663",
+								"delete-address",
+								"4a7f7769-ab39-4878-a7ac-7815b03d63b4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

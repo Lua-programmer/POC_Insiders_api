@@ -83,19 +83,21 @@
 </table>
 
 <h3 align="center" >Configurando a aplicação para poder utilizar em sua IDE</h3>
-1° - Após clonar a aplicação: *git clone*
+1° - Após clonar a aplicação: **git clone**
 <br>
-<br>2° - Renomeie o arquivo *example.env* que se encontra dentro do diretório *docker* para somente *.env* e altere os dados da mesma forma mencionado abaixo:
-<br>MYSQL_ROOT_PASSWORD=suasenharoot
-<br>MYSQL_DATABASE=nomedoseubanco
-<br>MYSQL_USER=seuusuario
-<br>MYSQL_PASSWORD=suasenhadeusuario
+<br>2° - Renomeie o arquivo **example.env** que se encontra dentro do diretório **docker** para somente **.env** e altere os dados da mesma forma mencionado abaixo:
+ 
+>MYSQL_ROOT_PASSWORD=suasenharoot <br>
+>MYSQL_DATABASE=nomedoseubanco <br>
+>MYSQL_USER=seuusuario <br>
+>MYSQL_PASSWORD=suasenhadeusuario <br>
+ 
 <br>
-<br>3° - Abra o terminal no diretório *docker* e rode o comando *docker-compose up -d*
+<br>3° - Abra o terminal no diretório **docker** e rode o comando **docker-compose up -d**
 <br>
-<br>4° - No diretório *resources* dentro do arquivo *application-dev.yml* troque as variáveis para os mesmos dados que foi adicionado no seu arquivo *.env* mencionado acima.
+<br>4° - No diretório **resources** dentro do arquivo **application-dev.yml** troque as variáveis para os mesmos dados que foram adicionados no seu arquivo **.env** mencionado acima.
 <br>
-<br>5º - Para testar a API no postman, faça o "import" do arquivo tal no seu Postman.
+<br>5º - Observe a [documentação](https://documenter.getpostman.com/view/17399592/2s8YzUyhKu) ou se preferir importe o arquivo **Documentação POC.postman_collection.json** para o seu Postman.
 <br>
 <br>
 <br>
