@@ -18,11 +18,10 @@ import io.github.luaprogrammer.poc.customer.rest.dto.response.CustomerResponseDT
 import io.github.luaprogrammer.poc.customer.rest.dto.response.IndividualCustomerResponseDTO;
 import io.github.luaprogrammer.poc.customer.service.CustomerService;
 import io.github.luaprogrammer.poc.exception.RuleBusinessException;
+import io.github.luaprogrammer.poc.utils.HashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -54,7 +53,10 @@ public class CustomerServiceImpl implements CustomerService {
     public CorporateCustomerResponseDTO findCorporateCustomerById(UUID id) {
         CorporateCustomer corporateCustomer = cRepository.findById(id).orElseThrow(
                 () -> new EmptyResultDataAccessException("Id " + id + " not found", 404));
-        return CorporateCustomerResponseDTO.convertForDto(corporateCustomer);
+
+        CorporateCustomerResponseDTO corporateCustomerResponseDTO = CorporateCustomerResponseDTO.convertForDto(corporateCustomer);
+        corporateCustomerResponseDTO.setCnpj(HashCode.format(corporateCustomerResponseDTO.getCnpj()));
+        return corporateCustomerResponseDTO;
     }
 
     @Override
@@ -174,7 +176,10 @@ public class CustomerServiceImpl implements CustomerService {
                 () -> new EmptyResultDataAccessException("Id " + id + " not found", 404)
         );
 
-        return IndividualCustomerResponseDTO.convertForDto(individualCustomer);
+
+        IndividualCustomerResponseDTO individualCustomerResponseDTO = IndividualCustomerResponseDTO.convertForDto(individualCustomer);
+        individualCustomerResponseDTO.setCpf(HashCode.format(individualCustomerResponseDTO.getCpf()));
+        return individualCustomerResponseDTO;
     }
 
     @Override
