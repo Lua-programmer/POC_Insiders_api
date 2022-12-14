@@ -83,7 +83,7 @@
 </table>
 
 <h3 align="center" >Configurando a aplicação para poder utilizar em sua IDE</h3>
-1° - Após clonar a aplicação: <b>git clone</b>
+1° - Após clonar a aplicação: <b>git clone https://github.com/Lua-programmer/POC_Insiders_api.git</b>
 <br>
 <br>2° - Renomeie o arquivo <b>example.env</b> que se encontra dentro do diretório <b>docker</b> para somente <b>.env</b> e altere os dados da mesma forma mencionado abaixo:
  
