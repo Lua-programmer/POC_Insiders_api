@@ -1,5 +1,5 @@
-<h1 align="center">API de Cadastros</h1>
-<p align="center">POC para os Insiders com a finalidade de criar uma api completa de cadastro de "customer" e adress"</p>
+<h1 align="center">API de cadastro</h1>
+<p align="center">POC para os Insiders com a finalidade de criar uma api completa de cadastro de "customer" e address"</p>
 
 <h3 align="center">Status do Projeto</h3>
 <p align="center"> API 💻 Em construção... </p>
